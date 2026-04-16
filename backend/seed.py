@@ -686,6 +686,20 @@ def seed_sales_data():
 
         admin_user = User.query.filter_by(role='admin').first()
 
+        # Create professional users if they don't exist
+        prof_users = [
+            {'email': 'juan.perez@primax.com', 'name': 'Juan Perez', 'password': 'Professional2024!', 'role': 'professional'},
+            {'email': 'maria.lopez@primax.com', 'name': 'Maria Lopez', 'password': 'Professional2024!', 'role': 'professional'},
+        ]
+        for pu in prof_users:
+            if not User.query.filter_by(email=pu['email']).first():
+                u = User(email=pu['email'], name=pu['name'], role=pu['role'],
+                         business_unit_id=vl_bu.id, is_active=True)
+                u.set_password(pu['password'])
+                db.session.add(u)
+        db.session.commit()
+        logger.info("Seeded professional users")
+
         # Points of Sale
         pdv_data = [
             {'code': 'EXITO_001', 'name': 'Exito Calle 80', 'address': 'Calle 80 #50-20', 'city': 'Bogota'},

@@ -132,8 +132,8 @@ def create_app(config_name=None):
         if User.query.first() is None:
             from seed import seed
             seed()
-        # Seed new sales data if tables are empty (added in v2)
-        elif PointOfSale.query.first() is None:
+        # Seed new sales data if tables are empty or professional users missing (added in v2)
+        elif PointOfSale.query.first() is None or User.query.filter_by(role='professional').first() is None:
             try:
                 from seed import seed_sales_data
                 seed_sales_data()
