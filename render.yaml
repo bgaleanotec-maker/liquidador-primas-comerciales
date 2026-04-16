@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: liquidador-primas-comerciales
+    env: python
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: >
+      pip install -r backend/requirements.txt &&
+      cd frontend && npm install && npm run build && cd .. &&
+      mkdir -p backend/dist && cp -r frontend/dist/. backend/dist/
+    startCommand: cd backend && gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: FLASK_ENV
+        value: production
+      - key: STATIC_FOLDER
+        value: dist
+      - key: PYTHON_VERSION
+        value: 3.11.0
+    autoDeploy: true
+    healthCheckPath: /api/health
