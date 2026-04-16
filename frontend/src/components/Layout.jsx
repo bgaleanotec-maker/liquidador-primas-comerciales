@@ -11,7 +11,10 @@ import {
   LogOut,
   Menu,
   X,
-  Bell
+  Bell,
+  ShoppingCart,
+  CreditCard,
+  Sliders
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -28,6 +31,9 @@ const Layout = ({ children, pendingCount = 0 }) => {
     { path: '/liquidations', label: 'Liquidaciones', icon: Calculator, roles: ['admin', 'analyst', 'approver'] },
     { path: '/approvals', label: 'Aprobaciones', icon: CheckCircle, roles: ['approver', 'admin'], badge: pendingCount },
     { path: '/reports', label: 'Reportes', icon: BarChart3, roles: ['admin', 'approver', 'analyst'] },
+    { path: '/sales', label: 'Ventas', icon: ShoppingCart, roles: ['admin', 'analyst'] },
+    { path: '/payments', label: 'Comisiones', icon: CreditCard, roles: ['admin', 'approver'] },
+    { path: '/config', label: 'Config LLAVEs', icon: Sliders, roles: ['admin'] },
     { path: '/admin', label: 'Administración', icon: Shield, roles: ['admin'] }
   ]
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { Mail, Lock, FileText, Users, GitBranch, Download, ChevronRight, ChevronDown } from 'lucide-react'
+import { Mail, Lock, FileText, Users, GitBranch, Download, ChevronRight, ChevronDown, X } from 'lucide-react'
 
 const isDev = import.meta.env.DEV
 
@@ -109,8 +109,19 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('sistema')
   const [showDocs, setShowDocs] = useState(false)
+  const [showBpmn, setShowBpmn] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (event.data === 'closeBpmn') {
+        setShowBpmn(false)
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -179,8 +190,16 @@ const Login = () => {
             {renderTab()}
           </div>
 
-          {/* Proposal Download */}
-          <div className="p-4 bg-white border-t border-gray-100">
+          {/* Proposal Download + BPMN */}
+          <div className="p-4 bg-white border-t border-gray-100 space-y-2">
+            <button
+              type="button"
+              onClick={() => setShowBpmn(true)}
+              className="flex items-center gap-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2.5 px-4 rounded-lg transition-colors"
+            >
+              <GitBranch size={14} />
+              Ver Flujo del Proceso
+            </button>
             <a
               href="/static/propuesta.docx"
               download
@@ -250,7 +269,14 @@ const Login = () => {
             </form>
 
             {/* Mobile: Docs Toggle */}
-            <div className="lg:hidden px-8 pb-4">
+            <div className="lg:hidden px-8 pb-4 space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowBpmn(true)}
+                className="w-full flex items-center justify-center gap-2 text-sm font-semibold text-indigo-700 border border-indigo-300 rounded-lg px-4 py-2.5 hover:bg-indigo-50 transition-colors"
+              >
+                <GitBranch size={14} /> Ver Proceso
+              </button>
               <button
                 onClick={() => setShowDocs(!showDocs)}
                 className="w-full flex items-center justify-between text-sm font-semibold text-primary-700 border border-primary-200 rounded-lg px-4 py-2.5 hover:bg-primary-50 transition-colors"
@@ -313,6 +339,49 @@ const Login = () => {
         </div>
 
       </div>
+
+      {/* ===== BPMN MODAL OVERLAY ===== */}
+      {showBpmn && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ animation: 'bpmnFadeIn 0.2s ease-out' }}
+        >
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black bg-opacity-75 backdrop-blur-sm"
+            onClick={() => setShowBpmn(false)}
+          />
+
+          {/* Modal content */}
+          <div className="relative z-10 flex flex-col items-end" style={{ width: '95vw', height: '90vh' }}>
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowBpmn(false)}
+              className="mb-2 flex items-center gap-1.5 bg-white text-gray-800 hover:bg-gray-100 text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lg transition-colors"
+            >
+              <X size={14} />
+              Cerrar
+            </button>
+
+            {/* iframe */}
+            <iframe
+              src="/bpmn-process.html"
+              title="Flujo del Proceso BPMN"
+              className="w-full flex-1 rounded-xl shadow-2xl border-0 bg-white"
+              style={{ width: '95vw', height: 'calc(90vh - 44px)' }}
+              allow="fullscreen"
+            />
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes bpmnFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+      `}</style>
     </div>
   )
 }

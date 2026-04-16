@@ -1,9 +1,11 @@
 from extensions import db
 from models import (
     User, BusinessUnit, Llave, KPI, Period, KPITarget, KPIResult,
-    Liquidation, ApprovalStep, DataSource, AuditLog
+    Liquidation, ApprovalStep, DataSource, AuditLog,
+    PointOfSale, SalesProfessional, ProfessionalAssignment, Sale,
+    CommissionPayment, LlaveConfig
 )
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import logging
 
 logger = logging.getLogger(__name__)
@@ -473,6 +475,173 @@ def seed():
 
         db.session.commit()
         logger.info("Created data sources")
+
+        # ─── VantiListo (VL) Sales Data ──────────────────────────────────────
+
+        vl_bu = bu_objects['VL']
+
+        # Create Points of Sale for VL
+        pdv_data = [
+            {'code': 'EXITO_001', 'name': 'Exito Calle 80', 'address': 'Calle 80 #50-20', 'city': 'Bogota'},
+            {'code': 'JUMBO_001', 'name': 'Jumbo Norte', 'address': 'Av. 9 #127-30', 'city': 'Bogota'},
+            {'code': 'ALKOSTO_001', 'name': 'Alkosto Centro', 'address': 'Cra 10 #15-30', 'city': 'Bogota'},
+            {'code': 'HOMECENTER_001', 'name': 'Homecenter Sur', 'address': 'Autopista Sur #60-50', 'city': 'Bogota'},
+            {'code': 'SAO_001', 'name': 'SAO Unicentro', 'address': 'Cra 15 #124-30', 'city': 'Bogota'},
+            {'code': 'FALABELLA_001', 'name': 'Falabella Titan', 'address': 'Av. Boyaca #80-94', 'city': 'Bogota'},
+        ]
+
+        pdv_objects = {}
+        for pdv_item in pdv_data:
+            pdv = PointOfSale.query.filter_by(code=pdv_item['code']).first()
+            if not pdv:
+                pdv = PointOfSale(
+                    code=pdv_item['code'],
+                    name=pdv_item['name'],
+                    address=pdv_item['address'],
+                    city=pdv_item['city'],
+                    business_unit_id=vl_bu.id,
+                    is_active=True
+                )
+                db.session.add(pdv)
+            pdv_objects[pdv_item['code']] = pdv
+
+        db.session.commit()
+        logger.info("Created VL points of sale")
+
+        # Create Sales Professionals for VL
+        prof_data = [
+            {'code': 'VL-001', 'name': 'Juan Perez', 'email': 'juan.perez@primax.com', 'phone': '3001234567', 'status': 'active'},
+            {'code': 'VL-002', 'name': 'Maria Lopez', 'email': 'maria.lopez@primax.com', 'phone': '3009876543', 'status': 'active'},
+            {'code': 'VL-003', 'name': 'Carlos Gomez', 'email': 'carlos.gomez@primax.com', 'phone': '3005551234', 'status': 'active'},
+            {'code': 'VL-004', 'name': 'Ana Rodriguez', 'email': 'ana.rodriguez@primax.com', 'phone': '3007778899', 'status': 'active'},
+            {'code': 'VL-005', 'name': 'Daniel Torres', 'email': 'daniel.torres@primax.com', 'phone': '3004443322', 'status': 'vacation'},
+        ]
+
+        prof_objects = {}
+        for prof_item in prof_data:
+            prof = SalesProfessional.query.filter_by(code=prof_item['code']).first()
+            if not prof:
+                prof = SalesProfessional(
+                    code=prof_item['code'],
+                    name=prof_item['name'],
+                    email=prof_item['email'],
+                    phone=prof_item['phone'],
+                    status=prof_item['status'],
+                    business_unit_id=vl_bu.id
+                )
+                db.session.add(prof)
+            prof_objects[prof_item['code']] = prof
+
+        db.session.commit()
+        logger.info("Created VL sales professionals")
+
+        # Create assignments for current period
+        assignment_map = [
+            ('VL-001', 'EXITO_001'),
+            ('VL-001', 'JUMBO_001'),
+            ('VL-002', 'ALKOSTO_001'),
+            ('VL-002', 'HOMECENTER_001'),
+            ('VL-003', 'SAO_001'),
+            ('VL-004', 'FALABELLA_001'),
+            ('VL-004', 'EXITO_001'),
+        ]
+
+        for prof_code, pdv_code in assignment_map:
+            existing = ProfessionalAssignment.query.filter_by(
+                professional_id=prof_objects[prof_code].id,
+                point_of_sale_id=pdv_objects[pdv_code].id,
+                period_id=period.id
+            ).first()
+            if not existing:
+                assignment = ProfessionalAssignment(
+                    professional_id=prof_objects[prof_code].id,
+                    point_of_sale_id=pdv_objects[pdv_code].id,
+                    period_id=period.id,
+                    start_date=date(now.year, now.month, 1),
+                    is_active=True
+                )
+                db.session.add(assignment)
+
+        db.session.commit()
+        logger.info("Created VL professional assignments")
+
+        # Create sample sales for current period
+        product_types = ['gas_natural', 'gasodomestico', 'seguro_hogar', 'mantenimiento']
+        sample_sales = [
+            ('VL-001', 'EXITO_001', 'gas_natural', 'Pedro Martinez', 'CONT-2026-001', 1500000, 75000),
+            ('VL-001', 'EXITO_001', 'gasodomestico', 'Laura Sanchez', 'CONT-2026-002', 850000, 42500),
+            ('VL-001', 'JUMBO_001', 'seguro_hogar', 'Roberto Diaz', 'CONT-2026-003', 320000, 16000),
+            ('VL-002', 'ALKOSTO_001', 'gas_natural', 'Carmen Ruiz', 'CONT-2026-004', 2100000, 105000),
+            ('VL-002', 'ALKOSTO_001', 'mantenimiento', 'Luis Garcia', 'CONT-2026-005', 450000, 22500),
+            ('VL-002', 'HOMECENTER_001', 'gas_natural', 'Sofia Herrera', 'CONT-2026-006', 1800000, 90000),
+            ('VL-003', 'SAO_001', 'gasodomestico', 'Andres Moreno', 'CONT-2026-007', 920000, 46000),
+            ('VL-003', 'SAO_001', 'gas_natural', 'Diana Castro', 'CONT-2026-008', 1350000, 67500),
+            ('VL-003', 'SAO_001', 'seguro_hogar', 'Felipe Ortiz', 'CONT-2026-009', 280000, 14000),
+            ('VL-004', 'FALABELLA_001', 'gas_natural', 'Patricia Vargas', 'CONT-2026-010', 1750000, 87500),
+            ('VL-004', 'FALABELLA_001', 'gasodomestico', 'Miguel Angel', 'CONT-2026-011', 680000, 34000),
+            ('VL-004', 'EXITO_001', 'mantenimiento', 'Claudia Reyes', 'CONT-2026-012', 390000, 19500),
+            ('VL-001', 'EXITO_001', 'gas_natural', 'Oscar Mendoza', 'CONT-2026-013', 2300000, 115000),
+            ('VL-002', 'HOMECENTER_001', 'gasodomestico', 'Isabel Paredes', 'CONT-2026-014', 750000, 37500),
+            ('VL-003', 'SAO_001', 'gas_natural', 'Javier Rios', 'CONT-2026-015', 1100000, 55000),
+        ]
+
+        admin_user = user_objects['admin@primax.com']
+        for idx, (prof_code, pdv_code, product, client, contract, value, commission) in enumerate(sample_sales):
+            sale_day = min(idx + 1, 28)  # Spread across the month
+            existing_sale = Sale.query.filter_by(contract_number=contract).first()
+            if not existing_sale:
+                sale = Sale(
+                    sale_date=date(now.year, now.month, sale_day),
+                    period_id=period.id,
+                    point_of_sale_id=pdv_objects[pdv_code].id,
+                    professional_id=prof_objects[prof_code].id,
+                    business_unit_id=vl_bu.id,
+                    product_type=product,
+                    client_name=client,
+                    contract_number=contract,
+                    sale_value=float(value),
+                    commission_value=float(commission),
+                    status='validated',
+                    source='seed_data',
+                    uploaded_by_id=admin_user.id
+                )
+                db.session.add(sale)
+
+        db.session.commit()
+        logger.info("Created VL sample sales")
+
+        # Create sample commission payments
+        commission_data = [
+            ('VL-001', 4650000, 232500, 0.85, 8.5, 2500000),
+            ('VL-002', 5100000, 255000, 0.90, 9.0, 2500000),
+            ('VL-003', 3650000, 182500, 0.78, 7.8, 2500000),
+            ('VL-004', 2820000, 141000, 0.82, 8.2, 2500000),
+        ]
+
+        for prof_code, total_sales, total_comm, score, pct, base in commission_data:
+            existing_payment = CommissionPayment.query.filter_by(
+                period_id=period.id,
+                professional_id=prof_objects[prof_code].id,
+                business_unit_id=vl_bu.id
+            ).first()
+            if not existing_payment:
+                payment = CommissionPayment(
+                    period_id=period.id,
+                    professional_id=prof_objects[prof_code].id,
+                    business_unit_id=vl_bu.id,
+                    total_sales=float(total_sales),
+                    total_commission=float(total_comm),
+                    llave_score=score,
+                    premium_pct=pct,
+                    premium_amount=base * (pct / 100),
+                    base_salary=float(base),
+                    status='calculated',
+                    details={'source': 'seed_data'}
+                )
+                db.session.add(payment)
+
+        db.session.commit()
+        logger.info("Created VL commission payments")
 
         logger.info("Database seed completed successfully!")
 

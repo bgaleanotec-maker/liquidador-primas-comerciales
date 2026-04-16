@@ -61,6 +61,9 @@ def create_app(config_name=None):
     from routes.approvals import approvals_bp
     from routes.reports import reports_bp
     from routes.metrics import metrics_bp
+    from routes.sales import sales_bp
+    from routes.payments import payments_bp
+    from routes.config import config_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
@@ -70,6 +73,9 @@ def create_app(config_name=None):
     app.register_blueprint(approvals_bp, url_prefix='/api/approvals')
     app.register_blueprint(reports_bp, url_prefix='/api/reports')
     app.register_blueprint(metrics_bp, url_prefix='/api/metrics')
+    app.register_blueprint(sales_bp, url_prefix='/api/sales')
+    app.register_blueprint(payments_bp, url_prefix='/api/payments')
+    app.register_blueprint(config_bp, url_prefix='/api/config')
 
     # Serve static docs (proposal, flows, etc.)
     @app.route('/static/<path:filename>', methods=['GET'])

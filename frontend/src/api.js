@@ -105,4 +105,43 @@ export const metricsAPI = {
   getSourceCoverage: () => api.get('/metrics/source-coverage')
 }
 
+export const salesAPI = {
+  // Points of Sale
+  getPointsOfSale: (bu_id) => api.get('/sales/points-of-sale', { params: { business_unit_id: bu_id } }),
+  createPointOfSale: (data) => api.post('/sales/points-of-sale', data),
+  updatePointOfSale: (id, data) => api.put(`/sales/points-of-sale/${id}`, data),
+
+  // Professionals
+  getProfessionals: (filters) => api.get('/sales/professionals', { params: filters }),
+  createProfessional: (data) => api.post('/sales/professionals', data),
+  updateProfessional: (id, data) => api.put(`/sales/professionals/${id}`, data),
+
+  // Assignments
+  getAssignments: (filters) => api.get('/sales/assignments', { params: filters }),
+  createAssignment: (data) => api.post('/sales/assignments', data),
+  updateAssignment: (id, data) => api.put(`/sales/assignments/${id}`, data),
+
+  // Sales
+  getSales: (filters) => api.get('/sales', { params: filters }),
+  uploadSalesCSV: (formData) => api.post('/sales/upload-csv', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  getSalesTemplate: (bu_code) => api.get(`/sales/template/${bu_code}`, { responseType: 'blob' }),
+  createSale: (data) => api.post('/sales/manual', data),
+  updateSale: (id, data) => api.put(`/sales/${id}`, data),
+  getSalesSummary: (filters) => api.get('/sales/summary', { params: filters }),
+}
+
+export const paymentsAPI = {
+  getPayments: (filters) => api.get('/payments', { params: filters }),
+  calculateCommissions: (data) => api.post('/payments/calculate', data),
+  approvePayment: (id) => api.post(`/payments/${id}/approve`),
+  markPaid: (id, data) => api.post(`/payments/${id}/mark-paid`, data),
+  getHistory: () => api.get('/payments/history'),
+}
+
+export const configAPI = {
+  getLlaveConfig: (bu_code, period_id) => api.get(`/config/llaves/${bu_code}`, { params: { period_id } }),
+  saveLlaveConfig: (data) => api.post('/config/llaves', data),
+  getConfigHistory: () => api.get('/config/llaves/history'),
+}
+
 export default api

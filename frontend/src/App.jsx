@@ -10,6 +10,9 @@ import Liquidations from './pages/Liquidations'
 import Approvals from './pages/Approvals'
 import Reports from './pages/Reports'
 import Admin from './pages/Admin'
+import Sales from './pages/Sales'
+import Payments from './pages/Payments'
+import ConfigLlaves from './pages/ConfigLlaves'
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
         <Route path="/liquidations" element={<ProtectedRoute element={<Liquidations />} />} />
         <Route path="/approvals" element={<ProtectedRoute element={<Approvals />} requiredRoles={['approver', 'admin']} />} />
         <Route path="/reports" element={<ProtectedRoute element={<Reports />} />} />
+        <Route path="/sales" element={<ProtectedRoute element={<Sales />} requiredRoles={['admin', 'analyst']} />} />
+        <Route path="/payments" element={<ProtectedRoute element={<Payments />} requiredRoles={['admin', 'approver']} />} />
+        <Route path="/config" element={<ProtectedRoute element={<ConfigLlaves />} requiredRoles={['admin']} />} />
         <Route path="/admin" element={<ProtectedRoute element={<Admin />} requiredRoles={['admin']} />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
