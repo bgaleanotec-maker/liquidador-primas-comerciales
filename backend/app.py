@@ -80,26 +80,11 @@ def create_app(config_name=None):
     # Health check endpoint
     @app.route('/api/health', methods=['GET'])
     def health_check():
-        from flask_jwt_extended import create_access_token, decode_token
-        # Diagnostic: create and verify token in same request
-        diag = {}
-        try:
-            test_token = create_access_token(identity=1)
-            decoded = decode_token(test_token)
-            diag['jwt_ok'] = True
-            diag['jwt_sub'] = decoded.get('sub')
-        except Exception as e:
-            diag['jwt_ok'] = False
-            diag['jwt_error'] = str(e)
-        diag['jwt_secret_set'] = bool(app.config.get('JWT_SECRET_KEY'))
-        diag['jwt_secret_len'] = len(app.config.get('JWT_SECRET_KEY', ''))
-        diag['secret_key_len'] = len(app.config.get('SECRET_KEY', ''))
         return jsonify({
             'success': True,
             'data': {
                 'status': 'ok',
-                'timestamp': datetime.utcnow().isoformat(),
-                'diag': diag
+                'timestamp': datetime.utcnow().isoformat()
             }
         }), 200
 

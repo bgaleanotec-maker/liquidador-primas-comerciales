@@ -32,7 +32,7 @@ def login():
         db.session.commit()
 
         # Create JWT token
-        access_token = create_access_token(identity=user.id)
+        access_token = create_access_token(identity=str(user.id))
 
         return jsonify({
             'success': True,
