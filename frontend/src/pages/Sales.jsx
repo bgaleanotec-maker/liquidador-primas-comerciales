@@ -354,19 +354,19 @@ const Sales = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestion de Ventas</h1>
-          <p className="text-gray-600 mt-1">Administra ventas, puntos de venta, profesionales y asignaciones</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Gestion de Ventas</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Administra ventas, puntos de venta, profesionales y asignaciones</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Unidad de Negocio</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unidad de Negocio</label>
               <select
                 value={selectedBU}
                 onChange={(e) => setSelectedBU(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Todas</option>
                 {businesses.map((bu) => (
@@ -375,11 +375,11 @@ const Sales = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Periodo</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Periodo</label>
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Todos</option>
                 {periods.map((p) => (
@@ -391,8 +391,8 @@ const Sales = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-200 overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
               return (
@@ -401,8 +401,8 @@ const Sales = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'text-primary-600 border-b-2 border-primary-600'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   <Icon size={18} />
@@ -449,7 +449,7 @@ const Sales = () => {
                   </button>
                   <button
                     onClick={handleDownloadTemplate}
-                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium"
                   >
                     <Download size={18} />
                     Descargar Plantilla
@@ -563,9 +563,9 @@ const Sales = () => {
             {/* ===== ASIGNACIONES TAB ===== */}
             {activeTab === 'asignaciones' && (
               <div className="space-y-6">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center gap-2">
-                  <Calendar size={20} className="text-blue-600 flex-shrink-0" />
-                  <p className="text-sm text-blue-800">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-center gap-2">
+                  <Calendar size={20} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                  <p className="text-sm text-blue-800 dark:text-blue-300">
                     Las asignaciones definen que profesional trabaja en cada punto de venta durante un periodo determinado.
                   </p>
                 </div>
@@ -602,7 +602,7 @@ const Sales = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsUploadModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -617,12 +617,12 @@ const Sales = () => {
         }
       >
         <div className="space-y-4">
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors">
+          <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <FileSpreadsheet size={40} className="mx-auto mb-3 text-gray-400" />
-            <p className="text-sm font-medium text-gray-900 mb-1">
+            <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
               {uploadFile ? uploadFile.name : 'Selecciona un archivo CSV'}
             </p>
-            <p className="text-xs text-gray-500 mb-3">CSV (max. 10MB)</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">CSV (max. 10MB)</p>
             <input
               type="file"
               onChange={(e) => { if (e.target.files?.[0]) setUploadFile(e.target.files[0]) }}
@@ -665,7 +665,7 @@ const Sales = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsManualModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -681,22 +681,22 @@ const Sales = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Punto de Venta</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Punto de Venta</label>
               <select
                 value={saleForm.point_of_sale_id}
                 onChange={(e) => setSaleForm({ ...saleForm, point_of_sale_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 {pointsOfSale.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Profesional</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profesional</label>
               <select
                 value={saleForm.professional_id}
                 onChange={(e) => setSaleForm({ ...saleForm, professional_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 {professionals.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -704,44 +704,44 @@ const Sales = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Producto</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Producto</label>
             <input
               type="text"
               value={saleForm.product}
               onChange={(e) => setSaleForm({ ...saleForm, product: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Nombre del producto"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cliente</label>
               <input
                 type="text"
                 value={saleForm.client_name}
                 onChange={(e) => setSaleForm({ ...saleForm, client_name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Nombre del cliente"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Valor Venta</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor Venta</label>
               <input
                 type="number"
                 value={saleForm.sale_value}
                 onChange={(e) => setSaleForm({ ...saleForm, sale_value: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="0"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Venta</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha de Venta</label>
             <input
               type="date"
               value={saleForm.sale_date}
               onChange={(e) => setSaleForm({ ...saleForm, sale_date: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -757,7 +757,7 @@ const Sales = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsPdvModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -773,53 +773,53 @@ const Sales = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Codigo</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Codigo</label>
               <input
                 type="text"
                 value={pdvForm.code}
                 onChange={(e) => setPdvForm({ ...pdvForm, code: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="PDV001"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
               <input
                 type="text"
                 value={pdvForm.name}
                 onChange={(e) => setPdvForm({ ...pdvForm, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Nombre del punto de venta"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Direccion</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Direccion</label>
             <input
               type="text"
               value={pdvForm.address}
               onChange={(e) => setPdvForm({ ...pdvForm, address: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Direccion"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ciudad</label>
               <input
                 type="text"
                 value={pdvForm.city}
                 onChange={(e) => setPdvForm({ ...pdvForm, city: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Ciudad"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Unidad de Negocio</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Unidad de Negocio</label>
               <select
                 value={pdvForm.business_unit_id}
                 onChange={(e) => setPdvForm({ ...pdvForm, business_unit_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 {businesses.map(bu => <option key={bu.id || bu.code} value={bu.id || bu.code}>{bu.code} - {bu.name}</option>)}
@@ -839,7 +839,7 @@ const Sales = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsProModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -855,43 +855,43 @@ const Sales = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Codigo</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Codigo</label>
               <input
                 type="text"
                 value={proForm.code}
                 onChange={(e) => setProForm({ ...proForm, code: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="PRO001"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
               <input
                 type="text"
                 value={proForm.name}
                 onChange={(e) => setProForm({ ...proForm, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Nombre completo"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
               <input
                 type="email"
                 value={proForm.email}
                 onChange={(e) => setProForm({ ...proForm, email: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="email@ejemplo.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
               <select
                 value={proForm.status}
                 onChange={(e) => setProForm({ ...proForm, status: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="active">Activo</option>
                 <option value="vacation">Vacaciones</option>
@@ -901,11 +901,11 @@ const Sales = () => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Unidad de Negocio</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Unidad de Negocio</label>
             <select
               value={proForm.business_unit_id}
               onChange={(e) => setProForm({ ...proForm, business_unit_id: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Seleccionar...</option>
               {businesses.map(bu => <option key={bu.id || bu.code} value={bu.id || bu.code}>{bu.code} - {bu.name}</option>)}
@@ -924,7 +924,7 @@ const Sales = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsAssignModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -939,11 +939,11 @@ const Sales = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Periodo</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Periodo</label>
             <select
               value={assignForm.period_id}
               onChange={(e) => setAssignForm({ ...assignForm, period_id: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Seleccionar...</option>
               {periods.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -951,22 +951,22 @@ const Sales = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Profesional</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profesional</label>
               <select
                 value={assignForm.professional_id}
                 onChange={(e) => setAssignForm({ ...assignForm, professional_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 {professionals.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Punto de Venta</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Punto de Venta</label>
               <select
                 value={assignForm.point_of_sale_id}
                 onChange={(e) => setAssignForm({ ...assignForm, point_of_sale_id: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 {pointsOfSale.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
@@ -975,21 +975,21 @@ const Sales = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha Inicio</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha Inicio</label>
               <input
                 type="date"
                 value={assignForm.start_date}
                 onChange={(e) => setAssignForm({ ...assignForm, start_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha Fin</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha Fin</label>
               <input
                 type="date"
                 value={assignForm.end_date}
                 onChange={(e) => setAssignForm({ ...assignForm, end_date: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>

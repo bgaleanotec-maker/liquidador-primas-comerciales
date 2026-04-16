@@ -168,13 +168,13 @@ const Approvals = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Aprobaciones de Liquidaciones</h1>
-          <p className="text-gray-600 mt-1">Revisa y aprueba liquidaciones pendientes</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Aprobaciones de Liquidaciones</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Revisa y aprueba liquidaciones pendientes</p>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
             {[
               { id: 'pending', label: `Pendientes (${pending.length})` },
               { id: 'history', label: `Historial (${history.length})` }
@@ -184,8 +184,8 @@ const Approvals = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-4 font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-primary-600 border-b-2 border-primary-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {tab.label}
@@ -199,20 +199,20 @@ const Approvals = () => {
                 {pending.length === 0 ? (
                   <div className="text-center py-12">
                     <CheckCircle size={48} className="mx-auto text-green-600 mb-4" />
-                    <p className="text-lg font-medium text-gray-900">No hay liquidaciones pendientes</p>
-                    <p className="text-gray-600">Todas las liquidaciones han sido procesadas</p>
+                    <p className="text-lg font-medium text-gray-900 dark:text-white">No hay liquidaciones pendientes</p>
+                    <p className="text-gray-600 dark:text-gray-400">Todas las liquidaciones han sido procesadas</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {pending.map((liquidation) => (
-                      <div key={liquidation.id} className="border border-gray-200 rounded-lg p-4">
+                      <div key={liquidation.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900">{liquidation.user}</h4>
-                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                            <h4 className="font-semibold text-gray-900 dark:text-white">{liquidation.user}</h4>
+                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
                               <span>UB: {liquidation.bu}</span>
                               <span>Período: {liquidation.period}</span>
-                              <span>Score: <span className="font-medium text-gray-900">{liquidation.score}%</span></span>
+                              <span>Score: <span className="font-medium text-gray-900 dark:text-white">{liquidation.score}%</span></span>
                               <span>Prima: <span className="font-medium text-gray-900">{formatCurrency(liquidation.premium)}</span></span>
                             </div>
                           </div>
@@ -220,7 +220,7 @@ const Approvals = () => {
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleViewDetail(liquidation)}
-                              className="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-sm"
+                              className="flex items-center gap-2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium text-sm"
                             >
                               <Eye size={16} />
                               Ver
@@ -258,7 +258,7 @@ const Approvals = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsDetailModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cerrar
             </button>
@@ -282,7 +282,7 @@ const Approvals = () => {
                 <div>
                   <p className="text-xs text-gray-600 font-medium">Usuario</p>
                   <p className="text-lg font-semibold text-gray-900">{mockLiquidationDetail.user}</p>
-                  <p className="text-sm text-gray-600">{mockLiquidationDetail.email}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{mockLiquidationDetail.email}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-600 font-medium">Unidad de Negocio</p>
@@ -309,15 +309,15 @@ const Approvals = () => {
 
             {/* Llaves Breakdown */}
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900">Desglose por Llave</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-white">Desglose por Llave</h4>
               {mockLiquidationDetail.llaves.map((llave, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                   <div>
-                    <p className="font-medium text-gray-900">{llave.name}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{llave.name}</p>
                     <p className="text-xs text-gray-600">{llave.cumplimiento}% cumplimiento</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-gray-900">{llave.score}</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">{llave.score}</p>
                     <p className="text-xs text-gray-600">{llave.weight}% peso</p>
                   </div>
                 </div>
@@ -337,7 +337,7 @@ const Approvals = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsDecisionModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -357,7 +357,7 @@ const Approvals = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Decisión</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Decisión</label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -368,7 +368,7 @@ const Approvals = () => {
                   onChange={(e) => setDecision(e.target.value)}
                   className="w-4 h-4 text-green-600"
                 />
-                <span className="text-gray-700">Aprobar</span>
+                <span className="text-gray-700 dark:text-gray-300">Aprobar</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -379,18 +379,18 @@ const Approvals = () => {
                   onChange={(e) => setDecision(e.target.value)}
                   className="w-4 h-4 text-red-600"
                 />
-                <span className="text-gray-700">Rechazar</span>
+                <span className="text-gray-700 dark:text-gray-300">Rechazar</span>
               </label>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Comentarios *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Comentarios *</label>
             <textarea
               value={comments}
               onChange={(e) => setComments(e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Ingresa tus comentarios..."
             />
           </div>

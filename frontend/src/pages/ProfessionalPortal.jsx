@@ -314,8 +314,8 @@ const ProfessionalPortal = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-200 overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon
               return (
@@ -324,8 +324,8 @@ const ProfessionalPortal = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'text-primary-600 border-b-2 border-primary-600'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   <Icon size={18} />
@@ -365,10 +365,10 @@ const ProfessionalPortal = () => {
                     value={formatCurrency(liquidation?.bonus_amount || 0)}
                     color="yellow"
                   />
-                  <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <p className="text-gray-600 text-sm font-medium">Estado</p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Estado</p>
                         <div className="mt-3">
                           {getStatusBadge(liquidation?.status)}
                         </div>
@@ -435,7 +435,7 @@ const ProfessionalPortal = () => {
 
                 {/* Detail breakdown */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Detalle de Comisiones</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Detalle de Comisiones</h3>
                   <Table columns={detailColumns} data={commissionDetail} loading={loading} />
                 </div>
               </div>
@@ -447,13 +447,13 @@ const ProfessionalPortal = () => {
                 {/* Filters */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Semana</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Semana</label>
                     <select
                       value={salesFilters.week}
                       onChange={(e) => {
                         setSalesFilters({ ...salesFilters, week: e.target.value })
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">Todas</option>
                       <option value="1">Semana 1</option>
@@ -464,13 +464,13 @@ const ProfessionalPortal = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de Producto</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Producto</label>
                     <select
                       value={salesFilters.product_type}
                       onChange={(e) => {
                         setSalesFilters({ ...salesFilters, product_type: e.target.value })
                       }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">Todos</option>
                       <option value="seguros">Seguros</option>
@@ -535,18 +535,18 @@ const ProfessionalPortal = () => {
                     </button>
                   </div>
                 ) : (
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 flex items-center gap-3">
+                  <div className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex items-center gap-3">
                     <AlertTriangle size={20} className="text-gray-400" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Periodo de reclamacion finalizado</p>
-                      <p className="text-xs text-gray-500 mt-0.5">No es posible crear nuevas objeciones en este momento.</p>
+                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Periodo de reclamacion finalizado</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">No es posible crear nuevas objeciones en este momento.</p>
                     </div>
                   </div>
                 )}
 
                 {/* Objections list */}
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Mis Objeciones</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Mis Objeciones</h3>
                   <Table columns={objectionColumns} data={objections} loading={loading} />
                 </div>
               </div>
@@ -555,7 +555,7 @@ const ProfessionalPortal = () => {
             {/* ===== HISTORICO TAB ===== */}
             {activeTab === 'historico' && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Periodos Anteriores</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Periodos Anteriores</h3>
 
                 {loading ? (
                   <div className="flex justify-center items-center h-64">
@@ -563,42 +563,42 @@ const ProfessionalPortal = () => {
                   </div>
                 ) : history.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-gray-500 text-sm">No hay datos historicos para mostrar</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">No hay datos historicos para mostrar</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {history.map((period) => (
-                      <div key={period.id} className="border border-gray-200 rounded-xl overflow-hidden">
+                      <div key={period.id} className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
                         <button
                           onClick={() => handleExpandPeriod(period)}
-                          className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors text-left"
+                          className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left"
                         >
                           <div className="flex items-center gap-4 flex-1">
                             <div className="bg-blue-50 text-blue-600 p-2 rounded-lg">
                               <Calendar size={20} />
                             </div>
                             <div className="flex-1">
-                              <p className="font-semibold text-gray-900">{period.period_name}</p>
-                              <p className="text-sm text-gray-500 mt-0.5">
+                              <p className="font-semibold text-gray-900 dark:text-white">{period.period_name}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                                 {period.total_sales_count || '-'} ventas
                               </p>
                             </div>
                             <div className="hidden sm:flex items-center gap-6 text-sm">
                               <div className="text-right">
-                                <p className="text-gray-500 text-xs">Ventas</p>
-                                <p className="font-medium text-gray-900">{formatCurrency(period.total_sales)}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-xs">Ventas</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{formatCurrency(period.total_sales)}</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-gray-500 text-xs">Comision</p>
-                                <p className="font-medium text-gray-900">{formatCurrency(period.commission_amount)}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-xs">Comision</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{formatCurrency(period.commission_amount)}</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-gray-500 text-xs">Score</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-xs">Score</p>
                                 <p className="font-medium text-gray-900">{period.llave_score ? `${period.llave_score}%` : '-'}</p>
                               </div>
                               <div className="text-right">
-                                <p className="text-gray-500 text-xs">Prima</p>
-                                <p className="font-medium text-gray-900">{formatCurrency(period.bonus_amount)}</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-xs">Prima</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{formatCurrency(period.bonus_amount)}</p>
                               </div>
                               <div>{getStatusBadge(period.status)}</div>
                             </div>
@@ -618,7 +618,7 @@ const ProfessionalPortal = () => {
 
                         {/* Expanded detail */}
                         {expandedPeriod === period.id && (
-                          <div className="border-t border-gray-200 bg-gray-50 p-5">
+                          <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 p-5">
                             <Table columns={detailColumns} data={expandedDetail} loading={false} />
                           </div>
                         )}
@@ -642,7 +642,7 @@ const ProfessionalPortal = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsObjectionModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -658,11 +658,11 @@ const ProfessionalPortal = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Objecion *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Objecion *</label>
             <select
               value={objectionForm.type}
               onChange={(e) => setObjectionForm({ ...objectionForm, type: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Seleccionar...</option>
               <option value="Venta faltante">Venta faltante</option>
@@ -673,22 +673,22 @@ const ProfessionalPortal = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Descripcion *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripcion *</label>
             <textarea
               value={objectionForm.description}
               onChange={(e) => setObjectionForm({ ...objectionForm, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               rows={4}
               placeholder="Describe tu objecion con el mayor detalle posible..."
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Referencia</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Referencia</label>
               <select
                 value={objectionForm.reference_type}
                 onChange={(e) => setObjectionForm({ ...objectionForm, reference_type: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Seleccionar...</option>
                 <option value="PQR">PQR</option>
@@ -698,12 +698,12 @@ const ProfessionalPortal = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Valor de Referencia</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Valor de Referencia</label>
               <input
                 type="text"
                 value={objectionForm.reference_value}
                 onChange={(e) => setObjectionForm({ ...objectionForm, reference_value: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Ej: PQR-12345"
               />
             </div>

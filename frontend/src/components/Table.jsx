@@ -20,21 +20,21 @@ const Table = ({ columns, data, loading, onSort, sortBy, sortOrder, actions }) =
   if (!data || data.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500 text-sm">No hay datos para mostrar</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">No hay datos para mostrar</p>
       </div>
     )
   }
 
   return (
-    <div className="overflow-x-auto border border-gray-200 rounded-lg">
+    <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
       <table className="w-full">
-        <thead className="bg-gray-50 border-b border-gray-200">
+        <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
           <tr>
             {columns.map((col) => (
               <th
                 key={col.key}
-                className={`px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider ${
-                  col.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
+                className={`px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider ${
+                  col.sortable ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''
                 }`}
                 onClick={() => col.sortable && handleSort(col.key)}
               >
@@ -46,14 +46,14 @@ const Table = ({ columns, data, loading, onSort, sortBy, sortOrder, actions }) =
                 </div>
               </th>
             ))}
-            {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Acciones</th>}
+            {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">Acciones</th>}
           </tr>
         </thead>
         <tbody>
           {data.map((row, idx) => (
-            <tr key={row.id || idx} className="border-b border-gray-200 hover:bg-gray-50">
+            <tr key={row.id || idx} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
               {columns.map((col) => (
-                <td key={col.key} className="px-6 py-4 text-sm">
+                <td key={col.key} className="px-6 py-4 text-sm text-gray-900 dark:text-gray-200">
                   {col.render ? col.render(row[col.key], row) : row[col.key]}
                 </td>
               ))}

@@ -153,13 +153,13 @@ const DataEntry = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Ingesta de Datos</h1>
-          <p className="text-gray-600 mt-1">Carga y gestiona datos de KPIs</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Ingesta de Datos</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Carga y gestiona datos de KPIs</p>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-700">
             {[
               { id: 'csv', label: 'Carga CSV/Excel' },
               { id: 'manual', label: 'Entrada Manual' },
@@ -170,8 +170,8 @@ const DataEntry = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-4 font-medium transition-colors ${
                   activeTab === tab.id
-                    ? 'text-primary-600 border-b-2 border-primary-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {tab.label}
@@ -185,11 +185,11 @@ const DataEntry = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Período</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Período</label>
                     <select
                       value={period}
                       onChange={(e) => setPeriod(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option>Junio 2024</option>
                       <option>Mayo 2024</option>
@@ -198,11 +198,11 @@ const DataEntry = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Unidad de Negocio</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unidad de Negocio</label>
                     <select
                       value={buCode}
                       onChange={(e) => setBuCode(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="VL">VL - Ventas Línea</option>
                       <option value="VM">VM - Ventas Mayorista</option>
@@ -218,14 +218,14 @@ const DataEntry = () => {
                   onDrop={handleDrop}
                   className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors ${
                     dragActive
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-300 bg-gray-50 hover:bg-gray-100'
+                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                      : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
                   <Upload size={48} className="mx-auto mb-4 text-gray-400" />
-                  <p className="text-lg font-semibold text-gray-900">Arrastra tu archivo aquí</p>
-                  <p className="text-gray-600 text-sm">o haz clic para seleccionar</p>
-                  <p className="text-gray-500 text-xs mt-2">CSV o XLSX (máx. 10MB)</p>
+                  <p className="text-lg font-semibold text-gray-900 dark:text-white">Arrastra tu archivo aquí</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">o haz clic para seleccionar</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs mt-2">CSV o XLSX (máx. 10MB)</p>
                   <input
                     type="file"
                     onChange={(e) => e.target.files && handleFileUpload(e.target.files[0])}
@@ -264,7 +264,7 @@ const DataEntry = () => {
 
                 <button
                   onClick={handleDownloadTemplate}
-                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium"
                 >
                   <Download size={18} />
                   Descargar Plantilla
@@ -277,20 +277,20 @@ const DataEntry = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Período</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Período</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
                       <option>Junio 2024</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Unidad de Negocio</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unidad de Negocio</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
                       <option>VL</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Usuario</label>
+                    <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
                       <option>Todos</option>
                     </select>
                   </div>
@@ -307,20 +307,20 @@ const DataEntry = () => {
             {/* Automatic Sources Tab */}
             {activeTab === 'auto' && (
               <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-gap-2">
-                  <AlertCircle size={20} className="text-blue-600 flex-shrink-0" />
-                  <p className="text-sm text-blue-800">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex items-gap-2">
+                  <AlertCircle size={20} className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                  <p className="text-sm text-blue-800 dark:text-blue-300">
                     Las fuentes automáticas permiten la integración con sistemas externos. Fase 1 (CSV) está disponible. Fase 2 (BigQuery) próximamente.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {dataSources.map((source) => (
-                    <div key={source.id} className="border border-gray-200 rounded-lg p-6">
+                    <div key={source.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="font-semibold text-gray-900">{source.name}</h3>
-                          <p className="text-sm text-gray-600">{source.type.toUpperCase()}</p>
+                          <h3 className="font-semibold text-gray-900 dark:text-white">{source.name}</h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{source.type.toUpperCase()}</p>
                         </div>
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
                           source.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
@@ -347,7 +347,7 @@ const DataEntry = () => {
                         )}
                         <button
                           onClick={() => setIsConfigModal(true)}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium text-sm flex items-center gap-2 justify-center"
+                          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium text-sm flex items-center gap-2 justify-center"
                         >
                           <Settings size={16} />
                           Config
@@ -372,7 +372,7 @@ const DataEntry = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsConfigModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -389,12 +389,12 @@ const DataEntry = () => {
         }
       >
         <div className="space-y-4">
-          <p className="text-gray-600">Configuración de BigQuery (Fase 2 - Próximamente)</p>
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <p className="text-gray-600 dark:text-gray-400">Configuración de BigQuery (Fase 2 - Próximamente)</p>
+          <div className="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
             <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
               Conectar con OAuth
             </button>
-            <p className="text-xs text-gray-600 mt-2">Se abrirá una ventana para autenticar con tu cuenta de Google Cloud</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">Se abrirá una ventana para autenticar con tu cuenta de Google Cloud</p>
           </div>
         </div>
       </Modal>

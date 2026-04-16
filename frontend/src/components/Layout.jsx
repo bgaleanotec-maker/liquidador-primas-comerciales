@@ -15,12 +15,16 @@ import {
   ShoppingCart,
   CreditCard,
   Sliders,
-  Briefcase
+  Briefcase,
+  Sun,
+  Moon
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 
 const Layout = ({ children, pendingCount = 0 }) => {
   const { user, logout } = useAuth()
+  const { isDark, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -48,20 +52,20 @@ const Layout = ({ children, pendingCount = 0 }) => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-800 transition-colors">
       {/* Sidebar */}
       <div className={`${
         mobileOpen ? 'w-64' : 'w-64'
-      } bg-white border-r border-gray-200 flex flex-col transition-all duration-300 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:h-full max-lg:z-40 ${
+      } bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-all duration-300 max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:h-full max-lg:z-40 ${
         !mobileOpen ? 'max-lg:w-0 max-lg:border-0' : ''
       }`}>
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <div className="text-3xl">💰</div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Primas</h1>
-              <p className="text-xs text-gray-600">Comerciales</p>
+              <h1 className="text-lg font-bold text-gray-900 dark:text-white">Primas</h1>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Comerciales</p>
             </div>
           </div>
         </div>
@@ -79,8 +83,8 @@ const Layout = ({ children, pendingCount = 0 }) => {
                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                   isActive(item.path)
-                    ? 'bg-primary-50 text-primary-600 font-medium'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 font-medium'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
               >
                 <Icon size={20} />
@@ -96,15 +100,15 @@ const Layout = ({ children, pendingCount = 0 }) => {
         </nav>
 
         {/* User Info */}
-        <div className="p-4 border-t border-gray-200">
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
-            <p className="text-xs text-gray-600">Conectado como</p>
-            <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
-            <p className="text-xs text-gray-600 truncate">{user?.email}</p>
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-4">
+            <p className="text-xs text-gray-600 dark:text-gray-400">Conectado como</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user?.name}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{user?.email}</p>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+            className="w-full flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors text-sm font-medium"
           >
             <LogOut size={16} />
             Cerrar Sesión
@@ -123,16 +127,23 @@ const Layout = ({ children, pendingCount = 0 }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden text-gray-600 hover:text-gray-900"
+            className="lg:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <h2 className="text-lg font-semibold text-gray-900 flex-1 hidden sm:block"></h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex-1 hidden sm:block"></h2>
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-gray-600 hover:text-gray-900">
+            <button
+              onClick={toggleTheme}
+              className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
               <Bell size={20} />
               {pendingCount > 0 && (
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">

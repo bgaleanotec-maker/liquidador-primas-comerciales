@@ -48,13 +48,13 @@ const Dashboard = () => {
       sortable: true,
       render: (value) => (
         <div className="flex items-center gap-2">
-          <div className="w-full bg-gray-200 rounded-full h-2 max-w-xs">
+          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 max-w-xs">
             <div
               className="bg-primary-600 h-2 rounded-full"
               style={{ width: `${value}%` }}
             ></div>
           </div>
-          <span className="font-medium text-sm">{value}%</span>
+          <span className="font-medium text-sm text-gray-900 dark:text-gray-200">{value}%</span>
         </div>
       )
     }
@@ -66,13 +66,13 @@ const Dashboard = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Bienvenido de vuelta. Aquí está tu resumen.</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Bienvenido de vuelta. Aquí está tu resumen.</p>
           </div>
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option>Junio 2024</option>
             <option>Mayo 2024</option>
@@ -111,13 +111,13 @@ const Dashboard = () => {
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Compliance by BU */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Cumplimiento por Unidad de Negocio</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Cumplimiento por Unidad de Negocio</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.bu_compliance}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="name" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-600" stroke="#e5e7eb" />
+                <XAxis dataKey="name" className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
+                <YAxis className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
                 <Tooltip />
                 <Bar dataKey="cumplimiento" fill="#3b82f6" radius={[8, 8, 0, 0]} />
               </BarChart>
@@ -125,13 +125,13 @@ const Dashboard = () => {
           </div>
 
           {/* Trend Chart */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Tendencia - Últimos 6 Meses</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tendencia - Últimos 6 Meses</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={data.trend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-600" stroke="#e5e7eb" />
+                <XAxis dataKey="month" className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
+                <YAxis className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
                 <Tooltip />
                 <Line
                   type="monotone"
@@ -148,8 +148,8 @@ const Dashboard = () => {
         {/* Status & Coverage */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Liquidation Status */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Estado de Liquidaciones</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Estado de Liquidaciones</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -172,16 +172,16 @@ const Dashboard = () => {
           </div>
 
           {/* KPI Coverage */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Cobertura de KPIs por BU</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Cobertura de KPIs por BU</h3>
             <div className="space-y-4">
               {data.kpi_coverage?.map((item) => (
                 <div key={item.bu}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-700">{item.bu}</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.bu}</span>
                     <span className="text-sm font-bold text-primary-600">{item.coverage}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                     <div
                       className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${item.coverage}%` }}
@@ -194,8 +194,8 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Actividad Reciente</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Actividad Reciente</h3>
           <Table columns={recentActivityColumns} data={data.recent_activity} loading={loading} />
         </div>
       </div>

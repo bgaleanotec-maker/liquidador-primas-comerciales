@@ -111,9 +111,9 @@ const Variables = () => {
 
     return (
       <div key={llave.id} className={`ml-${level * 4}`}>
-        <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg border border-gray-200 mb-2">
+        <div className="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-700 mb-2">
           {hasChildren && (
-            <button onClick={() => toggleExpanded(llave.id)} className="text-gray-600 hover:text-gray-900">
+            <button onClick={() => toggleExpanded(llave.id)} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
               {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
             </button>
           )}
@@ -121,14 +121,14 @@ const Variables = () => {
 
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <code className="bg-gray-100 px-2 py-1 rounded text-xs font-mono">{llave.code}</code>
-              <span className="font-medium text-gray-900">{llave.name}</span>
+              <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs font-mono text-gray-900 dark:text-gray-200">{llave.code}</code>
+              <span className="font-medium text-gray-900 dark:text-white">{llave.name}</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             {getSourceBadge(llave.source_type)}
-            <span className="font-semibold text-gray-900 min-w-12 text-right">{llave.weight}%</span>
+            <span className="font-semibold text-gray-900 dark:text-white min-w-12 text-right">{llave.weight}%</span>
             <button
               onClick={() => {
                 setEditingLlave(llave)
@@ -159,8 +159,8 @@ const Variables = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Gobernanza de Variables</h1>
-            <p className="text-gray-600 mt-1">Administra las llaves y KPIs por unidad de negocio</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Gobernanza de Variables</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Administra las llaves y KPIs por unidad de negocio</p>
           </div>
           <button
             onClick={handleAddLlave}
@@ -172,8 +172,8 @@ const Variables = () => {
         </div>
 
         {/* BU Selector */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <label className="block text-sm font-medium text-gray-700 mb-3">Unidad de Negocio</label>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Unidad de Negocio</label>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
             {businesses.map((bu) => (
               <button
@@ -182,7 +182,7 @@ const Variables = () => {
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                   buCode === bu.code
                     ? 'bg-primary-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {bu.code}
@@ -192,11 +192,11 @@ const Variables = () => {
         </div>
 
         {/* Weight Summary */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Resumen de Pesos</h3>
-              <p className="text-gray-600 text-sm">Total de pesos asignados: {totalWeight}%</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Resumen de Pesos</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Total de pesos asignados: {totalWeight}%</p>
             </div>
             {totalWeight === 100 ? (
               <div className="flex items-center gap-2 text-green-600">
@@ -212,7 +212,7 @@ const Variables = () => {
           </div>
           <button
             onClick={handleAutoNormalize}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors font-medium"
           >
             <Zap size={18} />
             Auto-normalizar pesos
@@ -220,8 +220,8 @@ const Variables = () => {
         </div>
 
         {/* LLAVE Tree */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Estructura de Llaves - {buCode}</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Estructura de Llaves - {buCode}</h3>
           <div className="space-y-2">
             {llaves.map((llave) => (
               <LlaveTreeNode key={llave.id} llave={llave} />
@@ -240,7 +240,7 @@ const Variables = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -255,45 +255,45 @@ const Variables = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Código</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Código</label>
             <input
               type="text"
               value={formData.code}
               onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="CÓDIGO_LLAVE"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Nombre de la Llave"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Peso (%)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Peso (%)</label>
             <input
               type="number"
               value={formData.weight}
               onChange={(e) => setFormData({ ...formData, weight: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               min="0"
               max="100"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipo de Fuente</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo de Fuente</label>
             <select
               value={formData.source_type}
               onChange={(e) => setFormData({ ...formData, source_type: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="automatico">Automático</option>
               <option value="semiautomatico">Semi-automático</option>

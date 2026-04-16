@@ -59,9 +59,9 @@ const Reports = () => {
         return (
           <ResponsiveContainer width="100%" height={400}>
             <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-600" stroke="#e5e7eb" />
+              <XAxis dataKey="month" className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
+              <YAxis className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
               <Tooltip />
               <Legend />
               <Bar dataKey="liquidations" fill="#3b82f6" name="Liquidaciones" />
@@ -97,9 +97,9 @@ const Reports = () => {
         return (
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={mockReports.monthly_summary}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="month" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-600" stroke="#e5e7eb" />
+              <XAxis dataKey="month" className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
+              <YAxis className="stroke-gray-500 dark:stroke-gray-400" stroke="#6b7280" />
               <Tooltip />
               <Legend />
               <Line
@@ -125,8 +125,8 @@ const Reports = () => {
       case 'user':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <h4 className="font-semibold text-gray-900 mb-3">Top 5 Usuarios</h4>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Top 5 Usuarios</h4>
               <div className="space-y-2">
                 {[
                   { name: 'Juan Pérez', score: 95, premium: 15000000 },
@@ -146,8 +146,8 @@ const Reports = () => {
               </div>
             </div>
 
-            <div className="bg-white p-4 rounded-lg border border-gray-200">
-              <h4 className="font-semibold text-gray-900 mb-3">Distribucion Premios</h4>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Distribucion Premios</h4>
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
@@ -203,8 +203,8 @@ const Reports = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Reportes</h1>
-          <p className="text-gray-600 mt-1">Análisis y visualización de datos de liquidaciones</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reportes</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Análisis y visualización de datos de liquidaciones</p>
         </div>
 
         {/* Report Type Selector */}
@@ -217,8 +217,8 @@ const Reports = () => {
                 onClick={() => setReportType(type.id)}
                 className={`p-4 rounded-lg border-2 transition-all text-center ${
                   reportType === type.id
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <Icon
@@ -228,7 +228,7 @@ const Reports = () => {
                   }`}
                 />
                 <p className={`text-sm font-medium ${
-                  reportType === type.id ? 'text-primary-600' : 'text-gray-700'
+                  reportType === type.id ? 'text-primary-600 dark:text-primary-400' : 'text-gray-700 dark:text-gray-300'
                 }`}>
                   {type.label}
                 </p>
@@ -238,14 +238,14 @@ const Reports = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Período</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Período</label>
               <select
                 value={filters.period}
                 onChange={(e) => setFilters({ ...filters, period: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option>Junio 2024</option>
                 <option>Mayo 2024</option>
@@ -256,11 +256,11 @@ const Reports = () => {
             {reportType !== 'monthly' && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Unidad de Negocio</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unidad de Negocio</label>
                   <select
                     value={filters.bu}
                     onChange={(e) => setFilters({ ...filters, bu: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="">Todas</option>
                     <option value="VL">VL</option>
@@ -271,11 +271,11 @@ const Reports = () => {
 
                 {reportType === 'user' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Usuario</label>
                     <select
                       value={filters.user}
                       onChange={(e) => setFilters({ ...filters, user: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     >
                       <option value="">Selecciona usuario</option>
                       <option value="juan">Juan Pérez</option>
@@ -288,11 +288,11 @@ const Reports = () => {
 
             {reportType === 'trend' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Meses a mostrar</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Meses a mostrar</label>
                 <select
                   value={filters.months}
                   onChange={(e) => setFilters({ ...filters, months: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value={3}>Últimos 3 meses</option>
                   <option value={6}>Últimos 6 meses</option>
@@ -304,14 +304,14 @@ const Reports = () => {
         </div>
 
         {/* Chart */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Visualización</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Visualización</h3>
             <div className="flex gap-2">
               <button
                 onClick={() => handleExport('excel')}
                 disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium disabled:opacity-50"
               >
                 <Download size={18} />
                 Excel
@@ -319,7 +319,7 @@ const Reports = () => {
               <button
                 onClick={() => handleExport('pdf')}
                 disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium disabled:opacity-50"
               >
                 <Download size={18} />
                 PDF
@@ -332,20 +332,20 @@ const Reports = () => {
 
         {/* Data Table */}
         {reportType === 'monthly' && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900">Datos Detallados</h3>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Datos Detallados</h3>
             </div>
             <Table columns={tableColumns} data={data} loading={loading} />
           </div>
         )}
 
         {/* Auto Report */}
-        <div className="bg-gradient-to-r from-primary-50 to-blue-50 rounded-xl shadow-sm p-6 border border-primary-200">
+        <div className="bg-gradient-to-r from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 rounded-xl shadow-sm p-6 border border-primary-200 dark:border-primary-800">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Reportes Automáticos</h3>
-              <p className="text-gray-600 mt-1">Programa la generación automática de reportes</p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Reportes Automáticos</h3>
+              <p className="text-gray-600 dark:text-gray-400 mt-1">Programa la generación automática de reportes</p>
             </div>
             <button className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium">
               Configurar

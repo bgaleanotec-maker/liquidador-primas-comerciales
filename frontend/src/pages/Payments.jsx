@@ -193,12 +193,12 @@ const Payments = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Comisiones y Pagos</h1>
-            <p className="text-gray-600 mt-1">Calcula, aprueba y gestiona pagos de comisiones</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Comisiones y Pagos</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Calcula, aprueba y gestiona pagos de comisiones</p>
           </div>
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium"
           >
             <Download size={18} />
             Exportar
@@ -228,14 +228,14 @@ const Payments = () => {
         </div>
 
         {/* Filters + Calculate */}
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Unidad de Negocio</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Unidad de Negocio</label>
               <select
                 value={selectedBU}
                 onChange={(e) => setSelectedBU(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Todas</option>
                 {businesses.map((bu) => (
@@ -244,11 +244,11 @@ const Payments = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Periodo</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Periodo</label>
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="">Todos</option>
                 {periods.map((p) => (
@@ -279,7 +279,7 @@ const Payments = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700">
           <div className="p-6">
             <Table
               columns={columns}

@@ -124,13 +124,13 @@ const Admin = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Administración</h1>
-          <p className="text-gray-600 mt-1">Gestiona usuarios, períodos y configuración del sistema</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Administración</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Gestiona usuarios, períodos y configuración del sistema</p>
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex border-b border-gray-200 overflow-x-auto">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
             {[
               { id: 'users', label: 'Usuarios' },
               { id: 'periods', label: 'Períodos' },
@@ -143,8 +143,8 @@ const Admin = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-6 py-4 font-medium transition-colors whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'text-primary-600 border-b-2 border-primary-600'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-primary-600 dark:text-primary-400 border-b-2 border-primary-600'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 {tab.label}
@@ -210,8 +210,8 @@ const Admin = () => {
             {/* Data Sources Tab */}
             {activeTab === 'datasources' && (
               <div className="space-y-4">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-800">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <p className="text-sm text-blue-800 dark:text-blue-300">
                     Gestiona las fuentes de datos disponibles. Fase 1: CSV. Fase 2: BigQuery (Próximamente)
                   </p>
                 </div>
@@ -233,15 +233,15 @@ const Admin = () => {
                       last_sync: '-'
                     }
                   ].map((source) => (
-                    <div key={source.name} className="border border-gray-200 rounded-lg p-4">
+                    <div key={source.name} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <h4 className="font-semibold text-gray-900">{source.name}</h4>
-                          <p className="text-sm text-gray-600">{source.type}</p>
+                          <h4 className="font-semibold text-gray-900 dark:text-white">{source.name}</h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{source.type}</p>
                         </div>
                         <StatusBadge status={source.status} />
                       </div>
-                      <p className="text-xs text-gray-600 mb-3">Última sincronización: {source.last_sync}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">Última sincronización: {source.last_sync}</p>
                       <button className="w-full px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium flex items-center gap-2 justify-center">
                         <Settings size={16} />
                         Configurar
@@ -257,7 +257,7 @@ const Admin = () => {
               <div className="space-y-4">
                 <button
                   onClick={handleExportAudit}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-medium"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium"
                 >
                   Exportar a CSV
                 </button>
@@ -269,70 +269,70 @@ const Admin = () => {
             {activeTab === 'settings' && (
               <div className="space-y-6">
                 {/* General Settings */}
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Configuración General</h3>
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Configuración General</h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Nombre de la Aplicación</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nombre de la Aplicación</label>
                       <input
                         type="text"
                         value="Liquidador Primas Comerciales"
                         readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-600"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-400"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Logo URL</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo URL</label>
                       <input
                         type="text"
                         value="💰"
                         readOnly
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-600"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-400"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Premium Calculation */}
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Parámetros de Cálculo de Prima</h3>
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Parámetros de Cálculo de Prima</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Umbral Mínimo (%)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Umbral Mínimo (%)</label>
                       <input
                         type="number"
                         defaultValue={50}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Prima Máxima (%)</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prima Máxima (%)</label>
                       <input
                         type="number"
                         defaultValue={30}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Notifications */}
-                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Notificaciones por Email</h3>
+                <div className="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Notificaciones por Email</h3>
                   <div className="space-y-3">
                     <label className="flex items-center gap-3">
                       <input type="checkbox" defaultChecked className="w-4 h-4 text-primary-600" />
-                      <span className="text-gray-700">Notificar al enviar liquidación</span>
+                      <span className="text-gray-700 dark:text-gray-300">Notificar al enviar liquidación</span>
                     </label>
                     <label className="flex items-center gap-3">
                       <input type="checkbox" defaultChecked className="w-4 h-4 text-primary-600" />
-                      <span className="text-gray-700">Notificar al aprobar/rechazar</span>
+                      <span className="text-gray-700 dark:text-gray-300">Notificar al aprobar/rechazar</span>
                     </label>
                     <label className="flex items-center gap-3">
                       <input type="checkbox" className="w-4 h-4 text-primary-600" />
-                      <span className="text-gray-700">Resumen diario (Próximamente)</span>
+                      <span className="text-gray-700 dark:text-gray-300">Resumen diario (Próximamente)</span>
                     </label>
                   </div>
                 </div>
@@ -359,7 +359,7 @@ const Admin = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsUserModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -375,33 +375,33 @@ const Admin = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="Nombre completo"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="email@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rol</label>
             <select
               value={formData.role}
               onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="analyst">Analista</option>
               <option value="approver">Aprobador</option>
@@ -410,11 +410,11 @@ const Admin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Unidad de Negocio</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Unidad de Negocio</label>
             <select
               value={formData.bu}
               onChange={(e) => setFormData({ ...formData, bu: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">Selecciona UB</option>
               <option value="VL">VL</option>
@@ -435,7 +435,7 @@ const Admin = () => {
           <div className="flex gap-3">
             <button
               onClick={() => setIsPeriodModal(false)}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
             >
               Cancelar
             </button>
@@ -453,17 +453,17 @@ const Admin = () => {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Año</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Año</label>
             <input
               type="number"
               defaultValue={2024}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mes</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mes</label>
+            <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="1">Enero</option>
               <option value="2">Febrero</option>
               <option value="3">Marzo</option>
@@ -480,8 +480,8 @@ const Admin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
+            <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500">
               <option value="open">Abierto</option>
               <option value="closed">Cerrado</option>
             </select>
