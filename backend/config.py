@@ -14,7 +14,11 @@ class Config:
             'connect_args': {
                 'options': '-csearch_path=primax',
                 'sslmode': 'require'
-            }
+            },
+            'pool_pre_ping': True,
+            'pool_recycle': 300,
+            'pool_size': 5,
+            'max_overflow': 10
         }
     else:
         SQLALCHEMY_ENGINE_OPTIONS = {}
