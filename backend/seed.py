@@ -651,6 +651,122 @@ def seed():
         raise
 
 
+def seed_sales_data():
+    """Seed sales data independently (for existing databases that need new tables populated)"""
+    from models import (BusinessUnit, Period, User, PointOfSale, SalesProfessional,
+                        ProfessionalAssignment, Sale, CommissionPayment)
+    from datetime import date, datetime
+
+    try:
+        now = datetime.utcnow()
+        vl_bu = BusinessUnit.query.filter_by(code='VL').first()
+        if not vl_bu:
+            logger.warning("VL business unit not found, skipping sales seed")
+            return
+
+        period = Period.query.filter_by(year=now.year, month=now.month).first()
+        if not period:
+            period = Period(year=now.year, month=now.month, status='open')
+            db.session.add(period)
+            db.session.commit()
+
+        admin_user = User.query.filter_by(role='admin').first()
+
+        # Points of Sale
+        pdv_data = [
+            {'code': 'EXITO_001', 'name': 'Exito Calle 80', 'address': 'Calle 80 #50-20', 'city': 'Bogota'},
+            {'code': 'JUMBO_001', 'name': 'Jumbo Norte', 'address': 'Av. 9 #127-30', 'city': 'Bogota'},
+            {'code': 'ALKOSTO_001', 'name': 'Alkosto Centro', 'address': 'Cra 10 #15-30', 'city': 'Bogota'},
+            {'code': 'HOMECENTER_001', 'name': 'Homecenter Sur', 'address': 'Autopista Sur #60-50', 'city': 'Bogota'},
+            {'code': 'SAO_001', 'name': 'SAO Unicentro', 'address': 'Cra 15 #124-30', 'city': 'Bogota'},
+            {'code': 'FALABELLA_001', 'name': 'Falabella Titan', 'address': 'Av. Boyaca #80-94', 'city': 'Bogota'},
+        ]
+        pdv_objects = {}
+        for item in pdv_data:
+            pdv = PointOfSale.query.filter_by(code=item['code']).first()
+            if not pdv:
+                pdv = PointOfSale(code=item['code'], name=item['name'], address=item['address'],
+                                  city=item['city'], business_unit_id=vl_bu.id, is_active=True)
+                db.session.add(pdv)
+            pdv_objects[item['code']] = pdv
+        db.session.commit()
+        logger.info("Seeded points of sale")
+
+        # Professionals
+        prof_data = [
+            {'code': 'VL-001', 'name': 'Juan Perez', 'email': 'juan.perez@primax.com', 'status': 'active'},
+            {'code': 'VL-002', 'name': 'Maria Lopez', 'email': 'maria.lopez@primax.com', 'status': 'active'},
+            {'code': 'VL-003', 'name': 'Carlos Gomez', 'email': 'carlos.gomez@primax.com', 'status': 'active'},
+            {'code': 'VL-004', 'name': 'Ana Rodriguez', 'email': 'ana.rodriguez@primax.com', 'status': 'active'},
+            {'code': 'VL-005', 'name': 'Daniel Torres', 'email': 'daniel.torres@primax.com', 'status': 'vacation'},
+        ]
+        prof_objects = {}
+        for item in prof_data:
+            prof = SalesProfessional.query.filter_by(code=item['code']).first()
+            if not prof:
+                prof = SalesProfessional(code=item['code'], name=item['name'], email=item['email'],
+                                         status=item['status'], business_unit_id=vl_bu.id)
+                db.session.add(prof)
+            prof_objects[item['code']] = prof
+        db.session.commit()
+        logger.info("Seeded professionals")
+
+        # Assignments
+        for prof_code, pdv_code in [('VL-001','EXITO_001'),('VL-001','JUMBO_001'),('VL-002','ALKOSTO_001'),
+                                     ('VL-002','HOMECENTER_001'),('VL-003','SAO_001'),('VL-004','FALABELLA_001'),('VL-004','EXITO_001')]:
+            if not ProfessionalAssignment.query.filter_by(professional_id=prof_objects[prof_code].id,
+                    point_of_sale_id=pdv_objects[pdv_code].id, period_id=period.id).first():
+                db.session.add(ProfessionalAssignment(professional_id=prof_objects[prof_code].id,
+                    point_of_sale_id=pdv_objects[pdv_code].id, period_id=period.id,
+                    start_date=date(now.year, now.month, 1), is_active=True))
+        db.session.commit()
+        logger.info("Seeded assignments")
+
+        # Sales
+        sales = [
+            ('VL-001','EXITO_001','gas_natural','Pedro Martinez','CONT-2026-001',1500000,75000),
+            ('VL-001','EXITO_001','gasodomestico','Laura Sanchez','CONT-2026-002',850000,42500),
+            ('VL-001','JUMBO_001','seguro_hogar','Roberto Diaz','CONT-2026-003',320000,16000),
+            ('VL-002','ALKOSTO_001','gas_natural','Carmen Ruiz','CONT-2026-004',2100000,105000),
+            ('VL-002','ALKOSTO_001','mantenimiento','Luis Garcia','CONT-2026-005',450000,22500),
+            ('VL-002','HOMECENTER_001','gas_natural','Sofia Herrera','CONT-2026-006',1800000,90000),
+            ('VL-003','SAO_001','gasodomestico','Andres Moreno','CONT-2026-007',920000,46000),
+            ('VL-003','SAO_001','gas_natural','Diana Castro','CONT-2026-008',1350000,67500),
+            ('VL-003','SAO_001','seguro_hogar','Felipe Ortiz','CONT-2026-009',280000,14000),
+            ('VL-004','FALABELLA_001','gas_natural','Patricia Vargas','CONT-2026-010',1750000,87500),
+            ('VL-004','FALABELLA_001','gasodomestico','Miguel Angel','CONT-2026-011',680000,34000),
+            ('VL-004','EXITO_001','mantenimiento','Claudia Reyes','CONT-2026-012',390000,19500),
+            ('VL-001','EXITO_001','gas_natural','Oscar Mendoza','CONT-2026-013',2300000,115000),
+            ('VL-002','HOMECENTER_001','gasodomestico','Isabel Paredes','CONT-2026-014',750000,37500),
+            ('VL-003','SAO_001','gas_natural','Javier Rios','CONT-2026-015',1100000,55000),
+        ]
+        for idx, (pc, pdvc, prod, cli, cont, val, comm) in enumerate(sales):
+            if not Sale.query.filter_by(contract_number=cont).first():
+                db.session.add(Sale(sale_date=date(now.year, now.month, min(idx+1,28)), period_id=period.id,
+                    point_of_sale_id=pdv_objects[pdvc].id, professional_id=prof_objects[pc].id,
+                    business_unit_id=vl_bu.id, product_type=prod, client_name=cli, contract_number=cont,
+                    sale_value=float(val), commission_value=float(comm), status='validated',
+                    source='seed_data', uploaded_by_id=admin_user.id if admin_user else None))
+        db.session.commit()
+        logger.info("Seeded sales")
+
+        # Commission payments
+        for pc, ts, tc, sc, pct, base in [('VL-001',4650000,232500,0.85,8.5,2500000),
+                ('VL-002',5100000,255000,0.90,9.0,2500000),('VL-003',3650000,182500,0.78,7.8,2500000),
+                ('VL-004',2820000,141000,0.82,8.2,2500000)]:
+            if not CommissionPayment.query.filter_by(period_id=period.id, professional_id=prof_objects[pc].id).first():
+                db.session.add(CommissionPayment(period_id=period.id, professional_id=prof_objects[pc].id,
+                    business_unit_id=vl_bu.id, total_sales=float(ts), total_commission=float(tc),
+                    llave_score=sc, premium_pct=pct, premium_amount=base*(pct/100), base_salary=float(base),
+                    status='calculated', details={'source': 'seed_data'}))
+        db.session.commit()
+        logger.info("Seeded commission payments - sales data complete!")
+
+    except Exception as e:
+        logger.error(f"Error seeding sales data: {str(e)}")
+        db.session.rollback()
+
+
 if __name__ == '__main__':
     from app import create_app
     app = create_app()

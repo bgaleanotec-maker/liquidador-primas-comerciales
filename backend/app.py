@@ -126,10 +126,18 @@ def create_app(config_name=None):
             raise
 
         # Check if we need to seed
-        from models import User
+        from models import User, PointOfSale
         if User.query.first() is None:
             from seed import seed
             seed()
+        # Seed new sales data if tables are empty (added in v2)
+        elif PointOfSale.query.first() is None:
+            try:
+                from seed import seed_sales_data
+                seed_sales_data()
+                app.logger.info("Seeded new sales data")
+            except Exception as e:
+                app.logger.warning(f"Sales seed note: {e}")
 
     return app
 
