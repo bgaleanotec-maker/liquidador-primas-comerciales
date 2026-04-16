@@ -5,7 +5,9 @@ from datetime import datetime
 
 def create_app(config_name=None):
     """Create and configure Flask app"""
-    app = Flask(__name__, static_folder=os.environ.get('STATIC_FOLDER', '../frontend/dist'), static_url_path='/')
+    # Disable Flask's built-in static handler to avoid conflicts with SPA catch-all
+    _static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.environ.get('STATIC_FOLDER', '../frontend/dist'))
+    app = Flask(__name__, static_folder=None)
 
     # Load configuration
     if config_name is None:
@@ -93,11 +95,11 @@ def create_app(config_name=None):
         if path and path.startswith('api/'):
             return jsonify({'success': False, 'error': 'Not found'}), 404
 
-        if path and os.path.exists(os.path.join(app.static_folder or '.', path)):
-            return send_from_directory(app.static_folder or '.', path)
+        if path and os.path.exists(os.path.join(_static_dir, path)):
+            return send_from_directory(_static_dir, path)
 
-        # Serve index.html for all other routes
-        return send_from_directory(app.static_folder or '.', 'index.html')
+        # Serve index.html for all SPA routes (React Router handles client-side routing)
+        return send_from_directory(_static_dir, 'index.html')
 
     # Initialize database and seed if needed
     with app.app_context():
