@@ -20,7 +20,9 @@ const Dashboard = () => {
       try {
         setLoading(true)
         const response = await metricsAPI.getDashboard()
-        setData(response)
+        if (response.data?.success && response.data?.data) {
+          setData({ ...mockDashboard, ...response.data.data })
+        }
       } catch (error) {
         console.log('Using mock data')
       } finally {
@@ -160,7 +162,7 @@ const Dashboard = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {data.liquidation_status.map((entry, index) => (
+                  {(data.liquidation_status || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
