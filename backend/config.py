@@ -8,12 +8,16 @@ class Config:
         _db_uri = _db_uri.replace('postgres://', 'postgresql://', 1)
     SQLALCHEMY_DATABASE_URI = _db_uri
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # Use 'primax' schema to coexist with other apps on the same PostgreSQL instance
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'connect_args': {
-            'options': '-csearch_path=primax'
+    # PostgreSQL connection options
+    if _db_uri and _db_uri.startswith('postgresql'):
+        SQLALCHEMY_ENGINE_OPTIONS = {
+            'connect_args': {
+                'options': '-csearch_path=primax',
+                'sslmode': 'require'
+            }
         }
-    } if _db_uri and _db_uri.startswith('postgresql') else {}
+    else:
+        SQLALCHEMY_ENGINE_OPTIONS = {}
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-primax-secret-2024')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=8)
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', '*')
