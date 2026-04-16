@@ -64,6 +64,7 @@ def create_app(config_name=None):
     from routes.sales import sales_bp
     from routes.payments import payments_bp
     from routes.config import config_bp
+    from routes.professional_portal import portal_bp
 
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
@@ -76,6 +77,7 @@ def create_app(config_name=None):
     app.register_blueprint(sales_bp, url_prefix='/api/sales')
     app.register_blueprint(payments_bp, url_prefix='/api/payments')
     app.register_blueprint(config_bp, url_prefix='/api/config')
+    app.register_blueprint(portal_bp, url_prefix='/api/portal')
 
     # Serve static docs (proposal, flows, etc.)
     @app.route('/static/<path:filename>', methods=['GET'])

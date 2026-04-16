@@ -88,6 +88,20 @@ def seed():
                 'role': 'viewer',
                 'business_unit_id': None
             },
+            {
+                'email': 'juan.perez@primax.com',
+                'name': 'Juan Perez',
+                'password': 'Professional2024!',
+                'role': 'professional',
+                'business_unit_id': bu_objects['VL'].id
+            },
+            {
+                'email': 'maria.lopez@primax.com',
+                'name': 'Maria Lopez',
+                'password': 'Professional2024!',
+                'role': 'professional',
+                'business_unit_id': bu_objects['VL'].id
+            },
         ]
 
         user_objects = {}

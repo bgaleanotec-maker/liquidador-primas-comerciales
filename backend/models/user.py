@@ -9,7 +9,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     name = db.Column(db.String(120), nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.String(50), nullable=False, default='viewer')  # super_admin, admin, approver, analyst, viewer
+    role = db.Column(db.String(50), nullable=False, default='viewer')  # super_admin, admin, approver, analyst, professional, viewer
     business_unit_id = db.Column(db.Integer, db.ForeignKey('business_units.id'), nullable=True)
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

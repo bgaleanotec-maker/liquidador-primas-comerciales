@@ -13,6 +13,7 @@
   --green:#10b981;--green-dim:#064e3b;
   --orange:#f59e0b;--orange-dim:#78350f;
   --purple:#a855f7;--purple-dim:#4c1d95;
+  --teal:#14b8a6;--teal-dim:#134e4a;
   --red:#ef4444;
   --radius:8px;
 }
@@ -24,12 +25,14 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-ap
 .header h1{font-size:1.3rem;font-weight:700;color:var(--text-bright);letter-spacing:.02em}
 .header p{color:var(--text-dim);font-size:.78rem;margin-top:4px}
 .kpi-bar{display:flex;justify-content:center;gap:12px;padding:10px 20px 14px;flex-wrap:wrap}
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;min-width:155px;text-align:center;position:relative;overflow:hidden}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;min-width:140px;text-align:center;position:relative;overflow:hidden}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .kpi-card.c-blue::before{background:var(--blue)}
 .kpi-card.c-green::before{background:var(--green)}
 .kpi-card.c-orange::before{background:var(--orange)}
 .kpi-card.c-purple::before{background:var(--purple)}
+.kpi-card.c-teal::before{background:var(--teal)}
+.kpi-card.c-red::before{background:var(--red)}
 .kpi-value{font-size:1.4rem;font-weight:700;color:var(--text-bright);font-variant-numeric:tabular-nums}
 .kpi-label{font-size:.68rem;color:var(--text-dim);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
 .diagram-wrap{overflow:auto;padding:4px 12px 28px}
@@ -48,16 +51,19 @@ svg.bpmn{display:block;margin:0 auto}
 .gateway{cursor:pointer;transition:filter .2s}
 .gateway:hover{filter:brightness(1.3)}
 .gateway-diamond{stroke-width:1.5}
+.timer-circle{fill:none;stroke-width:1.5;cursor:pointer;transition:filter .2s}
+.timer-circle:hover{filter:brightness(1.3) drop-shadow(0 0 8px rgba(255,255,255,.15))}
 .flow-line{fill:none;stroke:var(--border);stroke-width:1.2}
 .flow-yes{stroke:var(--green)}
 .flow-no{stroke:var(--red)}
+.flow-timeout{stroke:var(--orange);stroke-dasharray:4 2}
 .bpmn-tooltip{position:fixed;background:#1e293b;border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius);font-size:.78rem;max-width:260px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.5);line-height:1.45}
 .bpmn-tooltip.visible{opacity:1}
 .bpmn-tooltip .tt-title{font-weight:700;color:var(--text-bright);margin-bottom:4px;font-size:.82rem}
 @keyframes flowPulse{0%{stroke-dashoffset:20}100%{stroke-dashoffset:0}}
 .flow-animated{stroke-dasharray:6 4;animation:flowPulse .8s linear infinite}
 @media(max-width:768px){
-  .kpi-bar{gap:8px}.kpi-card{min-width:130px;padding:8px 12px}.kpi-value{font-size:1.2rem}.header h1{font-size:1.1rem}html{font-size:12px}
+  .kpi-bar{gap:8px}.kpi-card{min-width:120px;padding:8px 12px}.kpi-value{font-size:1.2rem}.header h1{font-size:1.1rem}html{font-size:12px}
 }
 @media(max-width:480px){
   .kpi-bar{flex-direction:column;align-items:center}.kpi-card{width:90%}
@@ -75,6 +81,8 @@ svg.bpmn{display:block;margin:0 auto}
   <div class="kpi-card c-green"><div class="kpi-value" id="k2">0</div><div class="kpi-label">Liquidaciones Procesadas</div></div>
   <div class="kpi-card c-orange"><div class="kpi-value" id="k3">0</div><div class="kpi-label">Tiempo Promedio Aprobacion</div></div>
   <div class="kpi-card c-purple"><div class="kpi-value" id="k4">0%</div><div class="kpi-label">Tasa de Aprobacion</div></div>
+  <div class="kpi-card c-teal"><div class="kpi-value" id="k5">0</div><div class="kpi-label">Objeciones Activas</div></div>
+  <div class="kpi-card c-red"><div class="kpi-value" id="k6">0%</div><div class="kpi-label">Auto-Aprobadas</div></div>
 </div>
 <div class="diagram-wrap" id="dw"></div>
 <div class="bpmn-tooltip" id="tt"></div>
@@ -85,20 +93,25 @@ const NS='http://www.w3.org/2000/svg';
 function E(t,a){const e=document.createElementNS(NS,t);if(a)for(const[k,v]of Object.entries(a))e.setAttribute(k,String(v));return e}
 function T(t,txt,a){const e=E(t,a);e.textContent=txt;return e}
 
-// Dimensions
-const HDR=34, LW=1100, LH=100, TM=16, LM=0;
-const NW=128, NH=38, GS=32;
-const totalW=HDR+LW+30, totalH=TM+4*LH+30;
+// Dimensions - 6 lanes now
+const HDR=34, LW=1200, LH=100, TM=16, LM=0;
+const NW=128, NH=38, GS=32, TR=14;
+const LANE_COUNT=6;
+const totalW=HDR+LW+30, totalH=TM+LANE_COUNT*LH+30;
 const X0=HDR+18, XE=HDR+LW-12;
 const CW=XE-X0;
 function px(p){return X0+CW*p}
 function ly(i){return TM+i*LH+LH/2}
 
+// Lane configs: 0=Analista, 1=Sistema, 2=Profesional/Ejecutivo, 3=Aprobador N1, 4=Admin N2, 5=(empty, used for routing)
+// Reorder: Analista, Sistema, Profesional/Ejecutivo, Aprobador N1, Admin N2
 const LC=[
   {s:'#3b82f6',f:'#1e3a6e',l:'Analista'},
   {s:'#10b981',f:'#064e3b',l:'Sistema'},
+  {s:'#14b8a6',f:'#134e4a',l:'Profesional/\nEjecutivo'},
   {s:'#f59e0b',f:'#78350f',l:'Aprobador N1'},
-  {s:'#a855f7',f:'#4c1d95',l:'Admin N2'}
+  {s:'#a855f7',f:'#4c1d95',l:'Admin N2'},
+  {s:'#64748b',f:'#1e293b',l:'Escalacion'}
 ];
 
 // Tooltip descriptions
@@ -123,54 +136,81 @@ const tips={
   validar_n2:'El Administrador N2 realiza la validacion final del negocio.',
   gw_n2:'Si aprueba se procede al registro de pago. Si rechaza devuelve al Analista.',
   reg_pago:'El sistema registra el pago aprobado en el sistema contable.',
+  pub_liq:'El sistema publica la liquidacion el dia 10 de cada mes para que los profesionales la revisen.',
   gen_reporte:'Se genera el reporte final de liquidacion con todos los detalles del periodo.',
-  end:'Fin del proceso de liquidacion de primas.'
+  end:'Fin del proceso de liquidacion de primas.',
+  revisar_personal:'El profesional/ejecutivo revisa los detalles de su liquidacion personal.',
+  gw_conforme:'El profesional indica si esta conforme con la liquidacion. Si no, registra una objecion.',
+  reg_objecion:'El profesional registra una objecion con referencia PQR, referencia de venta y detalle.',
+  timer_reclamacion:'Periodo de reclamacion de 5 dias habiles para presentar objeciones.',
+  cerrar_reclamacion:'Se cierra el periodo de reclamacion y se procesan las objeciones pendientes.',
+  end_conforme:'El profesional esta conforme con la liquidacion. Proceso finalizado para este profesional.',
+  timer_n1:'Temporizador de 3 dias para que el Aprobador N1 apruebe la liquidacion.',
+  escalar_superior:'Se escala la aprobacion al Admin N2 por vencimiento del plazo de N1.',
+  timer_n2_esc:'Temporizador de 24 horas para que Admin N2 resuelva la escalacion.',
+  auto_aprobacion:'El sistema auto-aprueba la liquidacion por vencimiento de todos los plazos de aprobacion.',
+  liq_firme:'La liquidacion queda en firme tras la auto-aprobacion por vencimiento de plazos.'
 };
 
-// Node definitions: id -> {x, y, lane, type, label}
+// Node definitions
 const N={};
+
 // Lane 0 - Analista: setup chain
 N.start={x:px(.01),y:ly(0),ln:0,t:'start'};
-N.config_llaves={x:px(.09),y:ly(0),ln:0,t:'task',lb:'Configurar\nLLAVEs y Pesos'};
-N.reg_pdv={x:px(.22),y:ly(0),ln:0,t:'task',lb:'Registrar PdV\ny Profesionales'};
-N.asignar_prof={x:px(.35),y:ly(0),ln:0,t:'task',lb:'Asignar Profesionales\na PdV'};
-N.cargar_ventas={x:px(.48),y:ly(0),ln:0,t:'task',lb:'Cargar Ventas\n(CSV / Manual)'};
-N.validar_datos={x:px(.61),y:ly(0),ln:0,t:'task',lb:'Validar Datos\nde Ventas'};
-N.gw_datos={x:px(.72),y:ly(0),ln:0,t:'gw',lb:'Datos\nCorrectos?'};
+N.config_llaves={x:px(.08),y:ly(0),ln:0,t:'task',lb:'Configurar\nLLAVEs y Pesos'};
+N.reg_pdv={x:px(.19),y:ly(0),ln:0,t:'task',lb:'Registrar PdV\ny Profesionales'};
+N.asignar_prof={x:px(.30),y:ly(0),ln:0,t:'task',lb:'Asignar Profesionales\na PdV'};
+N.cargar_ventas={x:px(.41),y:ly(0),ln:0,t:'task',lb:'Cargar Ventas\n(CSV / Manual)'};
+N.validar_datos={x:px(.52),y:ly(0),ln:0,t:'task',lb:'Validar Datos\nde Ventas'};
+N.gw_datos={x:px(.62),y:ly(0),ln:0,t:'gw',lb:'Datos\nCorrectos?'};
 
 // Lane 1 - Sistema: calculation chain
-N.calc_kpi={x:px(.09),y:ly(1),ln:1,t:'task',lb:'Calcular\nCumplimiento KPIs'};
-N.aplicar_pesos={x:px(.22),y:ly(1),ln:1,t:'task',lb:'Aplicar Pesos\npor LLAVE'};
-N.calc_score={x:px(.35),y:ly(1),ln:1,t:'task',lb:'Calcular\nScore Total'};
-N.gen_liq={x:px(.48),y:ly(1),ln:1,t:'task',lb:'Generar\nLiquidacion'};
-N.crear_aprobacion={x:px(.61),y:ly(1),ln:1,t:'task',lb:'Crear Pasos\nde Aprobacion'};
+N.calc_kpi={x:px(.08),y:ly(1),ln:1,t:'task',lb:'Calcular\nCumplimiento KPIs'};
+N.aplicar_pesos={x:px(.19),y:ly(1),ln:1,t:'task',lb:'Aplicar Pesos\npor LLAVE'};
+N.calc_score={x:px(.30),y:ly(1),ln:1,t:'task',lb:'Calcular\nScore Total'};
+N.gen_liq={x:px(.41),y:ly(1),ln:1,t:'task',lb:'Generar\nLiquidacion'};
+N.crear_aprobacion={x:px(.52),y:ly(1),ln:1,t:'task',lb:'Crear Pasos\nde Aprobacion'};
 
 // Lane 0 - Analista: review (right side)
-N.revisar_liq={x:px(.80),y:ly(0),ln:0,t:'task',lb:'Revisar\nLiquidacion'};
-N.enviar_aprobacion={x:px(.93),y:ly(0),ln:0,t:'task',lb:'Enviar para\nAprobacion'};
+N.revisar_liq={x:px(.72),y:ly(0),ln:0,t:'task',lb:'Revisar\nLiquidacion'};
+N.enviar_aprobacion={x:px(.83),y:ly(0),ln:0,t:'task',lb:'Enviar para\nAprobacion'};
 
-// Lane 2 - Aprobador N1
-N.revisar_n1={x:px(.80),y:ly(2),ln:2,t:'task',lb:'Revisar\nLiquidacion N1'};
-N.gw_n1={x:px(.68),y:ly(2),ln:2,t:'gw',lb:'Aprobado\nN1?'};
-N.devolver_n1={x:px(.55),y:ly(2),ln:2,t:'task',lb:'Devolver con\nComentarios'};
+// Lane 3 - Aprobador N1
+N.revisar_n1={x:px(.72),y:ly(3),ln:3,t:'task',lb:'Revisar\nLiquidacion N1'};
+N.gw_n1={x:px(.60),y:ly(3),ln:3,t:'gw',lb:'Aprobado\nN1?'};
+N.devolver_n1={x:px(.48),y:ly(3),ln:3,t:'task',lb:'Devolver con\nComentarios'};
+N.timer_n1={x:px(.83),y:ly(3),ln:3,t:'timer',lb:'3 dias\npara aprobar'};
 
-// Lane 3 - Admin N2
-N.validar_n2={x:px(.55),y:ly(3),ln:3,t:'task',lb:'Validacion\nFinal'};
-N.gw_n2={x:px(.43),y:ly(3),ln:3,t:'gw',lb:'Aprobado\nN2?'};
+// Lane 4 - Admin N2
+N.validar_n2={x:px(.48),y:ly(4),ln:4,t:'task',lb:'Validacion\nFinal'};
+N.gw_n2={x:px(.37),y:ly(4),ln:4,t:'gw',lb:'Aprobado\nN2?'};
+N.escalar_superior={x:px(.83),y:ly(4),ln:4,t:'task',lb:'Escalar a\nSuperior'};
+N.timer_n2_esc={x:px(.91),y:ly(4),ln:4,t:'timer',lb:'24 horas'};
 
-// Lane 1 - Sistema: final
-N.reg_pago={x:px(.80),y:ly(1),ln:1,t:'task',lb:'Registrar\nPago'};
-N.gen_reporte={x:px(.91),y:ly(1),ln:1,t:'task',lb:'Generar\nReporte'};
-N.end={x:px(.98),y:ly(1),ln:1,t:'end'};
+// Lane 1 - Sistema: final steps
+N.reg_pago={x:px(.62),y:ly(1),ln:1,t:'task',lb:'Registrar\nPago'};
+N.pub_liq={x:px(.72),y:ly(1),ln:1,t:'task',lb:'Publicar Liquidacion\n(dia 10)'};
+N.gen_reporte={x:px(.83),y:ly(1),ln:1,t:'task',lb:'Generar\nReporte'};
+N.auto_aprobacion={x:px(.96),y:ly(1),ln:1,t:'task',lb:'Auto-Aprobacion'};
+N.liq_firme={x:px(.96),y:ly(5),ln:5,t:'task',lb:'Liquidacion\nen Firme'};
+N.end={x:px(.93),y:ly(1),ln:1,t:'end'};
+
+// Lane 2 - Profesional/Ejecutivo
+N.revisar_personal={x:px(.08),y:ly(2),ln:2,t:'task',lb:'Revisar Liquidacion\nPersonal'};
+N.gw_conforme={x:px(.19),y:ly(2),ln:2,t:'gw',lb:'Conforme?'};
+N.reg_objecion={x:px(.30),y:ly(2),ln:2,t:'task',lb:'Registrar\nObjecion'};
+N.timer_reclamacion={x:px(.41),y:ly(2),ln:2,t:'timer',lb:'Reclamacion\n5 dias hab.'};
+N.cerrar_reclamacion={x:px(.52),y:ly(2),ln:2,t:'task',lb:'Cerrar Periodo\nReclamacion'};
+N.end_conforme={x:px(.30),y:ly(2)+36,ln:2,t:'end_small'};
 
 // Build SVG
 const svg=E('svg',{class:'bpmn',viewBox:`0 0 ${totalW} ${totalH}`,width:'100%'});
 svg.style.maxWidth=totalW+'px';
-svg.style.minWidth='750px';
+svg.style.minWidth='800px';
 
 // Defs
 const defs=E('defs');
-[[' ','#64748b'],['G','#10b981'],['R','#ef4444']].forEach(([id,c])=>{
+[[' ','#64748b'],['G','#10b981'],['R','#ef4444'],['O','#f59e0b']].forEach(([id,c])=>{
   const m=E('marker',{id:'a'+id.trim()||'h',markerWidth:8,markerHeight:6,refX:7,refY:3,orient:'auto',markerUnits:'strokeWidth'});
   m.appendChild(E('path',{d:'M0,0 L8,3 L0,6 Z',fill:c}));
   defs.appendChild(m);
@@ -178,11 +218,18 @@ const defs=E('defs');
 svg.appendChild(defs);
 
 // Draw lanes
-for(let i=0;i<4;i++){
+for(let i=0;i<LANE_COUNT;i++){
   const y=TM+i*LH;
   svg.appendChild(E('rect',{x:0,y:y,width:HDR+LW,height:LH,class:'lane-bg',fill:'rgba(255,255,255,.015)'}));
   svg.appendChild(E('rect',{x:0,y:y,width:HDR,height:LH,class:'lane-header',fill:LC[i].f,stroke:LC[i].s}));
-  svg.appendChild(T('text',LC[i].l,{x:HDR/2,y:y+LH/2,class:'lane-label',fill:LC[i].s,'font-size':'11','text-anchor':'middle','dominant-baseline':'central',transform:`rotate(-90,${HDR/2},${y+LH/2})`}));
+  const labelLines=LC[i].l.split('\n');
+  if(labelLines.length>1){
+    labelLines.forEach((line,li)=>{
+      svg.appendChild(T('text',line,{x:HDR/2,y:y+LH/2+(li-0.5)*13,class:'lane-label',fill:LC[i].s,'font-size':'10','text-anchor':'middle','dominant-baseline':'central',transform:`rotate(-90,${HDR/2},${y+LH/2+(li-0.5)*13})`}));
+    });
+  }else{
+    svg.appendChild(T('text',LC[i].l,{x:HDR/2,y:y+LH/2,class:'lane-label',fill:LC[i].s,'font-size':'11','text-anchor':'middle','dominant-baseline':'central',transform:`rotate(-90,${HDR/2},${y+LH/2})`}));
+  }
 }
 
 // Flow group (drawn behind nodes)
@@ -201,6 +248,9 @@ for(const[id,n]of Object.entries(N)){
     g.appendChild(E('circle',{cx:n.x,cy:n.y,r:13,class:'end-circle'}));
     g.appendChild(E('circle',{cx:n.x,cy:n.y,r:9,fill:'none',stroke:'#fca5a5','stroke-width':2}));
     g.appendChild(T('text','Fin',{x:n.x,y:n.y+24,fill:'#ef4444','font-size':'8','text-anchor':'middle','font-weight':'600'}));
+  }else if(n.t==='end_small'){
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:10,class:'end-circle'}));
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:7,fill:'none',stroke:'#fca5a5','stroke-width':1.5}));
   }else if(n.t==='gw'){
     const gg=E('g',{class:'gateway',transform:`translate(${n.x},${n.y})`});
     gg.appendChild(E('rect',{x:-GS/2,y:-GS/2,width:GS,height:GS,transform:'rotate(45)',fill:lc.f,stroke:lc.s,class:'gateway-diamond'}));
@@ -210,6 +260,19 @@ for(const[id,n]of Object.entries(N)){
       });
     }
     g.appendChild(gg);
+  }else if(n.t==='timer'){
+    // Timer event - circle with clock icon
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:TR,class:'timer-circle',stroke:lc.s,fill:lc.f}));
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:TR-3,class:'timer-circle',stroke:lc.s,fill:'none','stroke-dasharray':'2 2'}));
+    // Clock hands
+    g.appendChild(E('line',{x1:n.x,y1:n.y,x2:n.x,y2:n.y-6,stroke:lc.s,'stroke-width':1.5}));
+    g.appendChild(E('line',{x1:n.x,y1:n.y,x2:n.x+4,y2:n.y+2,stroke:lc.s,'stroke-width':1.5}));
+    if(n.lb){
+      const lines=n.lb.split('\n');
+      lines.forEach((l,i)=>{
+        g.appendChild(T('text',l,{x:n.x,y:n.y+TR+8+i*10,fill:lc.s,'font-size':'7','font-weight':'600','text-anchor':'middle'}));
+      });
+    }
   }else{
     const rx=n.x-NW/2, ry=n.y-NH/2;
     g.appendChild(E('rect',{x:rx,y:ry,width:NW,height:NH,class:'node-rect',fill:lc.f,stroke:lc.s}));
@@ -227,8 +290,13 @@ for(const[id,n]of Object.entries(N)){
 // Anchor helper
 function anc(id,side){
   const n=N[id];
-  const r=n.t==='start'||n.t==='end'?13:(n.t==='gw'?GS/2*Math.SQRT2*.72:0);
-  if(n.t==='start'||n.t==='end'){
+  let r;
+  if(n.t==='start'||n.t==='end') r=13;
+  else if(n.t==='end_small') r=10;
+  else if(n.t==='gw') r=GS/2*Math.SQRT2*.72;
+  else if(n.t==='timer') r=TR;
+  else r=0;
+  if(n.t==='start'||n.t==='end'||n.t==='end_small'||n.t==='timer'){
     return{right:{x:n.x+r,y:n.y},left:{x:n.x-r,y:n.y},top:{x:n.x,y:n.y-r},bottom:{x:n.x,y:n.y+r}}[side];
   }
   if(n.t==='gw'){
@@ -247,9 +315,9 @@ function addLabel(x,y,txt,cls){
 }
 
 // Straight horizontal
-function hFlow(from,fside,to,tside){
+function hFlow(from,fside,to,tside,cls,mkr){
   const a=anc(from,fside),b=anc(to,tside);
-  addFlow(`M${a.x},${a.y} L${b.x},${b.y}`);
+  addFlow(`M${a.x},${a.y} L${b.x},${b.y}`,cls,mkr);
 }
 // Orthogonal via midpoint
 function vFlow(from,fside,to,tside,cls,mkr){
@@ -297,7 +365,7 @@ vFlow('crear_aprobacion','top','revisar_liq','bottom');
 // revisar_liq -> enviar_aprobacion
 hFlow('revisar_liq','right','enviar_aprobacion','left');
 
-// enviar_aprobacion -> down to revisar_n1 (Aprobador N1)
+// enviar_aprobacion -> down to revisar_n1 (Aprobador N1 - lane 3)
 vFlow('enviar_aprobacion','bottom','revisar_n1','top');
 
 // revisar_n1 -> gw_n1 (left)
@@ -314,12 +382,11 @@ hFlow('revisar_n1','left','gw_n1','right');
 (function(){
   const a=anc('devolver_n1','top');
   const b=anc('revisar_liq','bottom');
-  // Route: up from devolver, across to revisar_liq x, then up into it
-  const midY=ly(1); // route through Sistema lane center
+  const midY=ly(1);
   addFlow(`M${a.x},${a.y} L${a.x},${midY} L${b.x},${midY} L${b.x},${b.y}`,'flow-no','url(#aR)');
 })();
 
-// gw_n1 Yes -> down to validar_n2 (Admin N2)
+// gw_n1 Yes -> down to validar_n2 (Admin N2 - lane 4)
 (function(){
   const a=anc('gw_n1','bottom'), b=anc('validar_n2','top');
   const my=(a.y+b.y)/2;
@@ -334,7 +401,7 @@ hFlow('validar_n2','left','gw_n2','right');
 (function(){
   const a=anc('gw_n2','bottom');
   const b=anc('revisar_liq','bottom');
-  const bottomY=TM+4*LH+16;
+  const bottomY=TM+LANE_COUNT*LH+16;
   addFlow(`M${a.x},${a.y} L${a.x},${bottomY} L${b.x},${bottomY} L${b.x},${b.y}`,'flow-no','url(#aR)');
   addLabel(a.x+10, a.y+14, 'No', 'flow-no');
 })();
@@ -343,15 +410,66 @@ hFlow('validar_n2','left','gw_n2','right');
 (function(){
   const a=anc('gw_n2','top');
   const b=anc('reg_pago','bottom');
-  const midY=ly(2); // through middle of Aprobador lane
+  const midY=ly(3);
   addFlow(`M${a.x},${a.y} L${a.x},${midY} L${b.x},${midY} L${b.x},${b.y}`,'flow-yes','url(#aG)');
   addLabel(a.x-14, a.y-12, 'Si', 'flow-yes');
 })();
 
-// reg_pago -> gen_reporte
-hFlow('reg_pago','right','gen_reporte','left');
-// gen_reporte -> end
+// reg_pago -> pub_liq -> gen_reporte -> end
+hFlow('reg_pago','right','pub_liq','left');
+hFlow('pub_liq','right','gen_reporte','left');
 hFlow('gen_reporte','right','end','left');
+
+// === NEW: Objection flow ===
+// pub_liq -> down to revisar_personal (Profesional lane 2)
+vFlow('pub_liq','bottom','revisar_personal','top');
+
+// revisar_personal -> gw_conforme
+hFlow('revisar_personal','right','gw_conforme','left');
+
+// gw_conforme Si -> end_conforme (down)
+(function(){
+  const a=anc('gw_conforme','bottom'), b=anc('end_conforme','top');
+  addFlow(`M${a.x},${a.y} L${b.x},${b.y}`,'flow-yes','url(#aG)');
+  addLabel(a.x+12, a.y+14, 'Si', 'flow-yes');
+})();
+
+// gw_conforme No -> reg_objecion
+(function(){
+  const a=anc('gw_conforme','right'), b=anc('reg_objecion','left');
+  addFlow(`M${a.x},${a.y} L${b.x},${b.y}`,'flow-no','url(#aR)');
+  addLabel((a.x+b.x)/2, a.y-6, 'No', 'flow-no');
+})();
+
+// reg_objecion -> timer_reclamacion
+hFlow('reg_objecion','right','timer_reclamacion','left');
+
+// timer_reclamacion -> cerrar_reclamacion
+hFlow('timer_reclamacion','right','cerrar_reclamacion','left');
+
+// === NEW: Escalation flow ===
+// revisar_n1 -> timer_n1 (right)
+hFlow('revisar_n1','right','timer_n1','left');
+
+// timer_n1 timeout -> escalar_superior (down to Admin N2 lane)
+(function(){
+  const a=anc('timer_n1','bottom'), b=anc('escalar_superior','top');
+  addFlow(`M${a.x},${a.y} L${b.x},${b.y}`,'flow-timeout','url(#aO)');
+  addLabel(a.x+16, (a.y+b.y)/2, 'Timeout', 'flow-timeout');
+})();
+
+// escalar_superior -> timer_n2_esc
+hFlow('escalar_superior','right','timer_n2_esc','left');
+
+// timer_n2_esc timeout -> auto_aprobacion (up to Sistema lane)
+(function(){
+  const a=anc('timer_n2_esc','top'), b=anc('auto_aprobacion','bottom');
+  addFlow(`M${a.x},${a.y} L${a.x},${b.y+20} L${b.x},${b.y+20} L${b.x},${b.y}`,'flow-timeout','url(#aO)');
+  addLabel(a.x-18, a.y-10, 'Timeout', 'flow-timeout');
+})();
+
+// auto_aprobacion -> liq_firme (down to Escalacion lane)
+vFlow('auto_aprobacion','bottom','liq_firme','top');
 
 // Insert SVG
 document.getElementById('dw').appendChild(svg);
@@ -381,7 +499,9 @@ const kpis=[
   {el:document.getElementById('k1'),target:87.5,dec:1,suf:'%'},
   {el:document.getElementById('k2'),target:58,dec:0,suf:''},
   {el:document.getElementById('k3'),target:2.3,dec:1,suf:' dias'},
-  {el:document.getElementById('k4'),target:94,dec:0,suf:'%'}
+  {el:document.getElementById('k4'),target:94,dec:0,suf:'%'},
+  {el:document.getElementById('k5'),target:3,dec:0,suf:''},
+  {el:document.getElementById('k6'),target:12,dec:0,suf:'%'}
 ];
 const t0=performance.now();
 function animKPI(now){

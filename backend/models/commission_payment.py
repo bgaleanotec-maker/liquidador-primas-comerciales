@@ -19,6 +19,11 @@ class CommissionPayment(db.Model):
     payment_date = db.Column(db.Date, nullable=True)
     payment_reference = db.Column(db.String(255), nullable=True)
     details = db.Column(db.JSON, nullable=True)
+    published_at = db.Column(db.DateTime, nullable=True)  # When published to professional (dia 10)
+    claim_deadline = db.Column(db.DateTime, nullable=True)  # End of claim period
+    auto_approved = db.Column(db.Boolean, default=False)  # If auto-approved by escalation
+    escalated_at = db.Column(db.DateTime, nullable=True)  # When escalated to superior
+    escalation_level = db.Column(db.Integer, default=0)  # 0=not escalated, 1=leader, 2=superior
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     period = db.relationship('Period', backref='commission_payments')
@@ -45,6 +50,11 @@ class CommissionPayment(db.Model):
             'payment_date': self.payment_date.isoformat() if self.payment_date else None,
             'payment_reference': self.payment_reference,
             'details': self.details,
+            'published_at': self.published_at.isoformat() if self.published_at else None,
+            'claim_deadline': self.claim_deadline.isoformat() if self.claim_deadline else None,
+            'auto_approved': self.auto_approved,
+            'escalated_at': self.escalated_at.isoformat() if self.escalated_at else None,
+            'escalation_level': self.escalation_level,
             'created_at': self.created_at.isoformat() if self.created_at else None,
         }
 

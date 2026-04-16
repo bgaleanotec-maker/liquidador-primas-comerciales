@@ -126,10 +126,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    const success = await login(email, password)
+    const loggedUser = await login(email, password)
     setLoading(false)
-    if (success) {
-      navigate('/dashboard')
+    if (loggedUser) {
+      navigate(loggedUser.role === 'professional' ? '/portal' : '/dashboard')
     }
   }
 

@@ -13,6 +13,7 @@ import Admin from './pages/Admin'
 import Sales from './pages/Sales'
 import Payments from './pages/Payments'
 import ConfigLlaves from './pages/ConfigLlaves'
+import ProfessionalPortal from './pages/ProfessionalPortal'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/reports" element={<ProtectedRoute element={<Reports />} />} />
         <Route path="/sales" element={<ProtectedRoute element={<Sales />} requiredRoles={['admin', 'analyst']} />} />
         <Route path="/payments" element={<ProtectedRoute element={<Payments />} requiredRoles={['admin', 'approver']} />} />
+        <Route path="/portal" element={<ProtectedRoute element={<ProfessionalPortal />} />} />
         <Route path="/config" element={<ProtectedRoute element={<ConfigLlaves />} requiredRoles={['admin']} />} />
         <Route path="/admin" element={<ProtectedRoute element={<Admin />} requiredRoles={['admin']} />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

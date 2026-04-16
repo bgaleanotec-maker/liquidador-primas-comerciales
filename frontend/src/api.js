@@ -144,4 +144,14 @@ export const configAPI = {
   getConfigHistory: () => api.get('/config/llaves/history'),
 }
 
+export const portalAPI = {
+  getMyLiquidations: () => api.get('/portal/my-liquidations'),
+  getMySales: (filters) => api.get('/portal/my-sales', { params: filters }),
+  getMyCommissions: (filters) => api.get('/portal/my-commissions', { params: filters }),
+  getCommissionDetail: (id) => api.get(`/portal/my-commissions/${id}/detail`),
+  createObjection: (data) => api.post('/portal/objections', data),
+  getObjections: () => api.get('/portal/objections'),
+  getWeeklyProgress: (period_id) => api.get('/portal/weekly-progress', { params: { period_id } }),
+}
+
 export default api

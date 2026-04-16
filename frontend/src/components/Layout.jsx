@@ -14,7 +14,8 @@ import {
   Bell,
   ShoppingCart,
   CreditCard,
-  Sliders
+  Sliders,
+  Briefcase
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -25,6 +26,7 @@ const Layout = ({ children, pendingCount = 0 }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const menuItems = [
+    { path: '/portal', label: 'Mi Portal', icon: Briefcase, roles: ['admin', 'approver', 'analyst', 'professional'] },
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'approver', 'analyst'] },
     { path: '/variables', label: 'Gobernanza de Variables', icon: Settings2, roles: ['admin'] },
     { path: '/data-entry', label: 'Ingesta de Datos', icon: Upload, roles: ['analyst', 'admin'] },
@@ -34,7 +36,7 @@ const Layout = ({ children, pendingCount = 0 }) => {
     { path: '/sales', label: 'Ventas', icon: ShoppingCart, roles: ['admin', 'analyst'] },
     { path: '/payments', label: 'Comisiones', icon: CreditCard, roles: ['admin', 'approver'] },
     { path: '/config', label: 'Config LLAVEs', icon: Sliders, roles: ['admin'] },
-    { path: '/admin', label: 'Administración', icon: Shield, roles: ['admin'] }
+    { path: '/admin', label: 'Administracion', icon: Shield, roles: ['admin'] }
   ]
 
   const visibleItems = menuItems.filter(item => item.roles.includes(user?.role))

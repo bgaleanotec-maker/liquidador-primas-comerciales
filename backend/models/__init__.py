@@ -14,6 +14,7 @@ from .sales_professional import SalesProfessional
 from .professional_assignment import ProfessionalAssignment
 from .sale import Sale
 from .commission_payment import CommissionPayment
+from .objection import Objection
 from .llave_config import LlaveConfig
 
 __all__ = [
@@ -33,5 +34,6 @@ __all__ = [
     'ProfessionalAssignment',
     'Sale',
     'CommissionPayment',
+    'Objection',
     'LlaveConfig',
 ]
