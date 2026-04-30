@@ -4,7 +4,7 @@ import { TrendingUp, AlertCircle, CheckCircle, Zap } from 'lucide-react'
 import Layout from '../components/Layout'
 import MetricCard from '../components/MetricCard'
 import Table from '../components/Table'
-import { metricsAPI } from '../api'
+import { metricsAPI, aliadosAPI } from '../api'
 import { mockDashboard } from '../utils/mockData'
 import { formatCurrency, formatPercent } from '../utils/format'
 
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [data, setData] = useState(mockDashboard)
   const [period, setPeriod] = useState('Junio 2024')
   const [loading, setLoading] = useState(true)
+  const [aliadoStats, setAliadoStats] = useState(null)
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -30,7 +31,15 @@ const Dashboard = () => {
       }
     }
 
+    const fetchAliados = async () => {
+      try {
+        const r = await aliadosAPI.stats()
+        setAliadoStats(r.data?.data || null)
+      } catch {}
+    }
+
     fetchDashboard()
+    fetchAliados()
   }, [])
 
   const recentActivityColumns = [
@@ -192,6 +201,39 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Aliados (Beta) */}
+        {aliadoStats && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Aliados por Sociedad</h3>
+                <span className="text-xs text-gray-500">Total: {aliadoStats.total_aliados}</span>
+              </div>
+              <ResponsiveContainer width="100%" height={260}>
+                <BarChart data={aliadoStats.by_sociedad}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="sociedad" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#10b981" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Asignaciones por Estado (vigentes hoy)</h3>
+              <ResponsiveContainer width="100%" height={260}>
+                <PieChart>
+                  <Pie data={aliadoStats.assignments_by_status} dataKey="count" nameKey="status"
+                       outerRadius={90} label={(e) => `${e.status}: ${e.count}`}>
+                    {aliadoStats.assignments_by_status.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
 
         {/* Recent Activity */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">

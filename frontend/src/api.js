@@ -154,4 +154,27 @@ export const portalAPI = {
   getWeeklyProgress: (period_id) => api.get('/portal/weekly-progress', { params: { period_id } }),
 }
 
+export const aliadosAPI = {
+  list: (params) => api.get('/aliados', { params }),
+  get: (id) => api.get(`/aliados/${id}`),
+  create: (data) => api.post('/aliados', data),
+  update: (id, data) => api.put(`/aliados/${id}`, data),
+  remove: (id) => api.delete(`/aliados/${id}`),
+  history: (id) => api.get(`/aliados/${id}/history`),
+  addHistory: (id, data) => api.post(`/aliados/${id}/history`, data),
+  updateHistory: (asgId, data) => api.put(`/aliados/history/${asgId}`, data),
+  deleteHistory: (asgId) => api.delete(`/aliados/history/${asgId}`),
+  resolve: (params) => api.get('/aliados/resolve', { params }),
+  importFile: (formData) => api.post('/aliados/import', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  stats: () => api.get('/aliados/stats/summary'),
+  statsForProfessional: (userId) => api.get(`/aliados/stats/professional/${userId}`),
+  myAssignments: () => api.get('/aliados/me/assignments'),
+  exportXlsx: (fecha) => api.get('/aliados/export', {
+    params: { fecha },
+    responseType: 'blob'
+  }),
+}
+
 export default api

@@ -13,7 +13,12 @@ const statusConfig = {
   closed: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Cerrado' },
   admin: { bg: 'bg-purple-100', text: 'text-purple-800', label: 'Administrador' },
   approver: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Aprobador' },
-  analyst: { bg: 'bg-green-100', text: 'text-green-800', label: 'Analista' }
+  analyst: { bg: 'bg-green-100', text: 'text-green-800', label: 'Analista' },
+  vacation: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Vacaciones' },
+  disability: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Incapacidad' },
+  leave: { bg: 'bg-indigo-100', text: 'text-indigo-800', label: 'Permiso' },
+  reassigned: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Reasignado' },
+  sin_asignar: { bg: 'bg-red-100', text: 'text-red-800', label: 'Sin asignar' }
 }
 
 const StatusBadge = ({ status, label }) => {

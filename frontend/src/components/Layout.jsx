@@ -17,7 +17,10 @@ import {
   Sliders,
   Briefcase,
   Sun,
-  Moon
+  Moon,
+  Users,
+  UserCheck,
+  Activity
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
@@ -30,8 +33,11 @@ const Layout = ({ children, pendingCount = 0 }) => {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const menuItems = [
-    { path: '/portal', label: 'Mi Portal', icon: Briefcase, roles: ['admin', 'approver', 'analyst', 'professional'] },
-    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'approver', 'analyst'] },
+    { path: '/portal', label: 'Mi Portal', icon: Briefcase, roles: ['admin', 'approver', 'analyst', 'professional', 'supervisor'] },
+    { path: '/my-dashboard', label: 'Mi Dashboard', icon: Activity, roles: ['professional'] },
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'approver', 'analyst', 'supervisor'] },
+    { path: '/aliados', label: 'Aliados', icon: Users, roles: ['admin', 'analyst', 'supervisor'] },
+    { path: '/supervisor', label: 'Mi Equipo', icon: UserCheck, roles: ['supervisor'] },
     { path: '/variables', label: 'Gobernanza de Variables', icon: Settings2, roles: ['admin'] },
     { path: '/data-entry', label: 'Ingesta de Datos', icon: Upload, roles: ['analyst', 'admin'] },
     { path: '/liquidations', label: 'Liquidaciones', icon: Calculator, roles: ['admin', 'analyst', 'approver'] },

@@ -14,8 +14,10 @@ const ProtectedRoute = ({ element, requiredRoles = [] }) => {
     return <Navigate to="/login" replace />
   }
 
-  // Professionals can only access portal
-  const defaultRoute = user?.role === 'professional' ? '/portal' : '/dashboard'
+  // Default landing per role
+  let defaultRoute = '/dashboard'
+  if (user?.role === 'professional') defaultRoute = '/my-dashboard'
+  else if (user?.role === 'supervisor') defaultRoute = '/supervisor'
 
   if (requiredRoles.length > 0 && !requiredRoles.includes(user?.role)) {
     return <Navigate to={defaultRoute} replace />

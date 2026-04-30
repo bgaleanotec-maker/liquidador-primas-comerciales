@@ -14,13 +14,23 @@ import Sales from './pages/Sales'
 import Payments from './pages/Payments'
 import ConfigLlaves from './pages/ConfigLlaves'
 import ProfessionalPortal from './pages/ProfessionalPortal'
+import Aliados from './pages/Aliados'
+import AliadoHistoria from './pages/AliadoHistoria'
+import SupervisorPanel from './pages/SupervisorPanel'
+import MyDashboard from './pages/MyDashboard'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-right" />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+        <Route path="/aliados" element={<ProtectedRoute element={<Aliados />} requiredRoles={['admin', 'super_admin', 'analyst', 'supervisor']} />} />
+        <Route path="/aliados/:id/historia" element={<ProtectedRoute element={<AliadoHistoria />} requiredRoles={['admin', 'super_admin', 'analyst', 'supervisor', 'professional']} />} />
+        <Route path="/supervisor" element={<ProtectedRoute element={<SupervisorPanel />} requiredRoles={['supervisor', 'admin', 'super_admin']} />} />
+        <Route path="/my-dashboard" element={<ProtectedRoute element={<MyDashboard />} requiredRoles={['professional']} />} />
         <Route path="/variables" element={<ProtectedRoute element={<Variables />} requiredRoles={['admin']} />} />
         <Route path="/data-entry" element={<ProtectedRoute element={<DataEntry />} requiredRoles={['analyst', 'admin']} />} />
         <Route path="/liquidations" element={<ProtectedRoute element={<Liquidations />} />} />

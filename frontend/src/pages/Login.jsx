@@ -129,7 +129,10 @@ const Login = () => {
     const loggedUser = await login(email, password)
     setLoading(false)
     if (loggedUser) {
-      navigate(loggedUser.role === 'professional' ? '/portal' : '/dashboard')
+      let target = '/dashboard'
+      if (loggedUser.role === 'professional') target = '/my-dashboard'
+      else if (loggedUser.role === 'supervisor') target = '/supervisor'
+      navigate(target)
     }
   }
 
@@ -314,9 +317,9 @@ const Login = () => {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { label: 'Super Admin', email: 'superadmin@primax.com', password: 'SuperAdmin2024!' },
-                    { label: 'Analista VL', email: 'analista.vl@primax.com', password: 'Analyst2024!' },
-                    { label: 'Aprobador', email: 'aprobador@primax.com', password: 'Approver2024!' },
-                    { label: 'Viewer', email: 'viewer@primax.com', password: 'Viewer2024!' },
+                    { label: 'Admin', email: 'admin@primax.com', password: 'Admin2024!' },
+                    { label: 'Supervisor', email: 'lina.delmarflorez@primax.com', password: 'Beta2026!' },
+                    { label: 'Profesional', email: 'juan.posada@primax.com', password: 'Beta2026!' },
                   ].map(u => (
                     <button
                       key={u.email}

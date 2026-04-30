@@ -16,6 +16,8 @@ from .sale import Sale
 from .commission_payment import CommissionPayment
 from .objection import Objection
 from .llave_config import LlaveConfig
+from .aliado import Aliado
+from .aliado_assignment import AliadoAssignment
 
 __all__ = [
     'User',
@@ -36,4 +38,6 @@ __all__ = [
     'CommissionPayment',
     'Objection',
     'LlaveConfig',
+    'Aliado',
+    'AliadoAssignment',
 ]
