@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       setToken(token)
       setUser(user)
 
-      return result.data.user
+      return user
     } catch (error) {
       const message = error.response?.data?.error || 'Error al iniciar sesión'
       toast.error(message)

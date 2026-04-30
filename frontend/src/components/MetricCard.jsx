@@ -1,31 +1,35 @@
 import React from 'react'
+import { TrendingUp, TrendingDown } from 'lucide-react'
 
-const MetricCard = ({ icon: Icon, label, value, change, color = 'blue' }) => {
-  const colorClasses = {
-    blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-    green: 'bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400',
-    yellow: 'bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
-    red: 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400',
-    purple: 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400'
-  }
+const COLORS = {
+  blue:    { bg: 'bg-blue-50 dark:bg-blue-900/20',       text: 'text-blue-600 dark:text-blue-400',       ring: 'ring-blue-100 dark:ring-blue-900/30' },
+  green:   { bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-600 dark:text-emerald-400', ring: 'ring-emerald-100 dark:ring-emerald-900/30' },
+  yellow:  { bg: 'bg-amber-50 dark:bg-amber-900/20',     text: 'text-amber-600 dark:text-amber-400',     ring: 'ring-amber-100 dark:ring-amber-900/30' },
+  red:     { bg: 'bg-rose-50 dark:bg-rose-900/20',       text: 'text-rose-600 dark:text-rose-400',       ring: 'ring-rose-100 dark:ring-rose-900/30' },
+  purple:  { bg: 'bg-violet-50 dark:bg-violet-900/20',   text: 'text-violet-600 dark:text-violet-400',   ring: 'ring-violet-100 dark:ring-violet-900/30' },
+  primary: { bg: 'bg-primary-50 dark:bg-primary-900/20', text: 'text-primary-600 dark:text-primary-400', ring: 'ring-primary-100 dark:ring-primary-900/30' },
+}
 
-  const changeColor = change >= 0 ? 'text-green-600' : 'text-red-600'
-
+const MetricCard = ({ icon: Icon, label, value, change, hint, color = 'blue' }) => {
+  const c = COLORS[color] || COLORS.blue
+  const positive = change >= 0
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">{label}</p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{value}</p>
+    <div className="group bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 shadow-soft hover:shadow-card transition-all">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-xs uppercase tracking-wide font-semibold text-slate-500 dark:text-slate-400">{label}</p>
+          <p className="text-3xl font-bold text-slate-900 dark:text-white mt-2 truncate" title={String(value)}>{value}</p>
+          {hint && <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">{hint}</p>}
           {change !== undefined && (
-            <p className={`text-sm font-medium mt-2 ${changeColor}`}>
-              {change >= 0 ? '+' : ''}{change}% vs mes anterior
-            </p>
+            <div className={`inline-flex items-center gap-1 mt-2 text-xs font-medium ${positive ? 'text-emerald-600' : 'text-rose-600'}`}>
+              {positive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+              {positive ? '+' : ''}{change}% vs mes anterior
+            </div>
           )}
         </div>
         {Icon && (
-          <div className={`${colorClasses[color]} p-3 rounded-lg`}>
-            <Icon size={24} />
+          <div className={`${c.bg} ${c.text} p-3 rounded-xl ring-4 ${c.ring} shrink-0`}>
+            <Icon size={22} strokeWidth={2.2} />
           </div>
         )}
       </div>
