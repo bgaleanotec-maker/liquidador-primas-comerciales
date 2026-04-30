@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trazabilidad de Aliados - Modulo Beta</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;--surface:#111827;--surface2:#1a2236;--border:#2a3454;
+  --text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc;
+  --indigo:#6366f1;--indigo-dim:#312e81;
+  --blue:#3b82f6;--blue-dim:#1e3a6e;
+  --green:#10b981;--green-dim:#064e3b;
+  --orange:#f59e0b;--orange-dim:#78350f;
+  --purple:#a855f7;--purple-dim:#4c1d95;
+  --teal:#14b8a6;--teal-dim:#134e4a;
+  --red:#ef4444;
+  --radius:8px;
+}
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',system-ui,sans-serif;overflow-x:hidden;min-height:100vh}
+.header{text-align:center;padding:24px 20px 8px}
+.header h1{font-size:1.4rem;font-weight:700;color:var(--text-bright);letter-spacing:.02em}
+.header p{color:var(--text-dim);font-size:.78rem;margin-top:4px}
+.header .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:20px;color:#a5b4fc;font-size:.7rem;font-weight:500;margin-bottom:8px}
+.header .badge .dot{width:6px;height:6px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.kpi-bar{display:flex;justify-content:center;gap:12px;padding:10px 20px 14px;flex-wrap:wrap}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;min-width:140px;text-align:center;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi-card.c-indigo::before{background:var(--indigo)}
+.kpi-card.c-blue::before{background:var(--blue)}
+.kpi-card.c-green::before{background:var(--green)}
+.kpi-card.c-orange::before{background:var(--orange)}
+.kpi-card.c-purple::before{background:var(--purple)}
+.kpi-card.c-teal::before{background:var(--teal)}
+.kpi-value{font-size:1.4rem;font-weight:700;color:var(--text-bright);font-variant-numeric:tabular-nums}
+.kpi-label{font-size:.68rem;color:var(--text-dim);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.diagram-wrap{overflow:auto;padding:4px 12px 28px}
+svg.bpmn{display:block;margin:0 auto}
+.lane-bg{stroke:var(--border);stroke-width:1}
+.lane-label{font-weight:600;letter-spacing:.03em}
+.node-rect{rx:8;ry:8;stroke-width:1.5;cursor:pointer;transition:filter .2s}
+.node-rect:hover{filter:brightness(1.3) drop-shadow(0 0 8px rgba(255,255,255,.15))}
+.node-text{pointer-events:none;font-weight:500}
+.start-circle{fill:#10b981;stroke:#34d399;stroke-width:2;cursor:pointer}
+.end-circle{fill:var(--red);stroke:#f87171;stroke-width:2;cursor:pointer}
+.gateway{cursor:pointer;transition:filter .2s}
+.gateway:hover{filter:brightness(1.3)}
+.gateway-diamond{stroke-width:1.5}
+.flow-line{fill:none;stroke:var(--border);stroke-width:1.4}
+.flow-yes{stroke:var(--green)}
+.flow-no{stroke:var(--red)}
+.flow-data{stroke:var(--indigo);stroke-dasharray:4 3}
+.bpmn-tooltip{position:fixed;background:#1e293b;border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--radius);font-size:.78rem;max-width:280px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.5);line-height:1.45}
+.bpmn-tooltip.visible{opacity:1}
+.bpmn-tooltip .tt-title{font-weight:700;color:var(--text-bright);margin-bottom:4px;font-size:.82rem}
+.legend{display:flex;justify-content:center;gap:16px;padding:10px 20px;flex-wrap:wrap;font-size:.72rem;color:var(--text-dim)}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-line{width:24px;height:2px}
+@media(max-width:768px){
+  .kpi-bar{gap:8px}.kpi-card{min-width:120px;padding:8px 12px}.kpi-value{font-size:1.2rem}.header h1{font-size:1.1rem}html{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <span class="badge"><span class="dot"></span>Modulo Beta &middot; Trazabilidad temporal</span>
+  <h1>Resolucion de Responsable por Aliado &amp; Fecha</h1>
+  <p>Flujo BPMN 2.0 &mdash; Liquidador de Primas Comerciales</p>
+</div>
+<div class="kpi-bar">
+  <div class="kpi-card c-indigo"><div class="kpi-value">683</div><div class="kpi-label">Aliados</div></div>
+  <div class="kpi-card c-green"><div class="kpi-value">684</div><div class="kpi-label">Asignaciones</div></div>
+  <div class="kpi-card c-blue"><div class="kpi-value">5</div><div class="kpi-label">Supervisores</div></div>
+  <div class="kpi-card c-purple"><div class="kpi-value">14</div><div class="kpi-label">Profesionales</div></div>
+  <div class="kpi-card c-orange"><div class="kpi-value">6</div><div class="kpi-label">Estados</div></div>
+  <div class="kpi-card c-teal"><div class="kpi-value">100%</div><div class="kpi-label">Trazabilidad</div></div>
+</div>
+<div class="legend">
+  <div class="legend-item"><span class="legend-line" style="background:#10b981"></span>Camino feliz</div>
+  <div class="legend-item"><span class="legend-line" style="background:#ef4444"></span>Excepcion</div>
+  <div class="legend-item"><span class="legend-line" style="background:#6366f1;background-image:repeating-linear-gradient(90deg,#6366f1 0 4px,transparent 4px 7px)"></span>Datos</div>
+</div>
+<div class="diagram-wrap" id="dw"></div>
+<div class="bpmn-tooltip" id="tt"></div>
+
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg';
+function E(t,a){const e=document.createElementNS(NS,t);if(a)for(const[k,v]of Object.entries(a))e.setAttribute(k,String(v));return e}
+function T(t,txt,a){const e=E(t,a);e.textContent=txt;return e}
+
+const HDR=44, LW=1320, LH=110, TM=16;
+const NW=140, NH=44, GS=36;
+const LANES=5;
+const totalW=HDR+LW+30, totalH=TM+LANES*LH+30;
+const X0=HDR+24, XE=HDR+LW-12;
+const CW=XE-X0;
+function px(p){return X0+CW*p}
+function ly(i){return TM+i*LH+LH/2}
+
+const LC=[
+  {s:'#3b82f6',f:'#1e3a6e',l:'Admin'},
+  {s:'#f59e0b',f:'#78350f',l:'Supervisor'},
+  {s:'#6366f1',f:'#312e81',l:'Sistema'},
+  {s:'#14b8a6',f:'#134e4a',l:'Profesional'},
+  {s:'#a855f7',f:'#4c1d95',l:'Liquidacion'}
+];
+
+const tips={
+  start:'Llegan ventas para liquidar. Cada venta tiene aliado (llave) y fecha.',
+  importar:'Admin sube el diccionario_aliados.xlsx. El sistema crea Aliados, supervisores, profesionales y la asignacion vigente desde la fecha indicada.',
+  monitorear:'Supervisor monitorea sus aliados a cargo en su panel.',
+  cambio:'Surge un cambio: vacaciones, incapacidad, permiso, reasignacion permanente.',
+  registrar_cambio:'Supervisor crea una nueva asignacion con responsable nuevo, estado, fecha de inicio y fin (o indefinido).',
+  cerrar_anterior:'El sistema cierra automaticamente la asignacion abierta anterior con end_date = nueva fecha de inicio - 1 dia.',
+  guardar_historial:'Se guarda como nuevo registro en aliado_assignments preservando la historia completa.',
+  cargar_ventas:'Llega una venta (CSV/API) con: llave de aliado y fecha de la venta.',
+  resolve:'Sistema consulta /api/aliados/resolve?llave=X&fecha=Y para conocer al responsable vigente en esa fecha exacta.',
+  gw_resuelto:'Se encontro asignacion vigente para el aliado en esa fecha?',
+  alerta:'Alerta a Admin/Supervisor: aliado sin asignacion vigente. Se requiere intervencion manual.',
+  asignar_venta:'La venta se asocia al profesional resuelto. Esto garantiza que cada venta vaya a quien era responsable en su fecha.',
+  consultar_panel:'El profesional consulta su Mi Dashboard: aliados activos, ventas, comisiones.',
+  ver_historial:'Profesional puede ver el historial de cualquier aliado al que ha pertenecido.',
+  liquidar:'Las ventas se agrupan por profesional/periodo para calcular comisiones y liquidaciones.',
+  pago:'Se ejecuta el pago de la comision al profesional correcto.',
+  end:'Liquidacion finalizada con trazabilidad completa.'
+};
+
+const N={};
+// Lane 0 - Admin
+N.start={x:px(0),y:ly(0),ln:0,t:'start'};
+N.importar={x:px(.10),y:ly(0),ln:0,t:'task',lb:'Importar\nDiccionario'};
+
+// Lane 1 - Supervisor
+N.monitorear={x:px(.10),y:ly(1),ln:1,t:'task',lb:'Monitorear\nAliados'};
+N.cambio={x:px(.22),y:ly(1),ln:1,t:'gw',lb:'Cambio?'};
+N.registrar_cambio={x:px(.32),y:ly(1),ln:1,t:'task',lb:'Registrar\nNueva Asignacion'};
+
+// Lane 2 - Sistema
+N.cerrar_anterior={x:px(.32),y:ly(2),ln:2,t:'task',lb:'Cerrar\nAsignacion Previa'};
+N.guardar_historial={x:px(.44),y:ly(2),ln:2,t:'task',lb:'Persistir\nHistorial'};
+N.cargar_ventas={x:px(.55),y:ly(2),ln:2,t:'task',lb:'Recibir Venta\n(llave + fecha)'};
+N.resolve={x:px(.66),y:ly(2),ln:2,t:'task',lb:'Resolve\n(llave, fecha)'};
+N.gw_resuelto={x:px(.76),y:ly(2),ln:2,t:'gw',lb:'Vigente?'};
+N.asignar_venta={x:px(.85),y:ly(2),ln:2,t:'task',lb:'Asociar Venta\na Profesional'};
+N.alerta={x:px(.85),y:ly(0),ln:0,t:'task',lb:'Alerta sin\nAsignacion'};
+
+// Lane 3 - Profesional
+N.consultar_panel={x:px(.85),y:ly(3),ln:3,t:'task',lb:'Consultar\nMi Dashboard'};
+N.ver_historial={x:px(.74),y:ly(3),ln:3,t:'task',lb:'Ver Historial\nAliados'};
+
+// Lane 4 - Liquidacion
+N.liquidar={x:px(.92),y:ly(4),ln:4,t:'task',lb:'Liquidar\nComisiones'};
+N.pago={x:px(.79),y:ly(4),ln:4,t:'task',lb:'Ejecutar\nPago'};
+N.end={x:px(.66),y:ly(4),ln:4,t:'end'};
+
+const svg=E('svg',{class:'bpmn',viewBox:`0 0 ${totalW} ${totalH}`,width:'100%'});
+svg.style.maxWidth=totalW+'px';
+svg.style.minWidth='800px';
+
+const defs=E('defs');
+[['h','#64748b'],['G','#10b981'],['R','#ef4444'],['I','#6366f1']].forEach(([id,c])=>{
+  const m=E('marker',{id:'a'+id,markerWidth:8,markerHeight:6,refX:7,refY:3,orient:'auto',markerUnits:'strokeWidth'});
+  m.appendChild(E('path',{d:'M0,0 L8,3 L0,6 Z',fill:c}));
+  defs.appendChild(m);
+});
+svg.appendChild(defs);
+
+// Lanes
+for(let i=0;i<LANES;i++){
+  const y=TM+i*LH;
+  svg.appendChild(E('rect',{x:0,y:y,width:HDR+LW,height:LH,class:'lane-bg',fill:'rgba(255,255,255,.018)'}));
+  svg.appendChild(E('rect',{x:0,y:y,width:HDR,height:LH,class:'lane-bg',fill:LC[i].f,stroke:LC[i].s}));
+  svg.appendChild(T('text',LC[i].l,{x:HDR/2,y:y+LH/2,class:'lane-label',fill:LC[i].s,'font-size':'12','text-anchor':'middle','dominant-baseline':'central',transform:`rotate(-90,${HDR/2},${y+LH/2})`}));
+}
+
+const flowG=E('g'); svg.appendChild(flowG);
+
+const nodeEls={};
+for(const[id,n]of Object.entries(N)){
+  const g=E('g',{'data-id':id,style:'cursor:pointer'});
+  const lc=LC[n.ln];
+  if(n.t==='start'){
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:14,class:'start-circle'}));
+    g.appendChild(T('text','Inicio',{x:n.x,y:n.y+26,fill:'#10b981','font-size':'9','text-anchor':'middle','font-weight':'600'}));
+  }else if(n.t==='end'){
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:14,class:'end-circle'}));
+    g.appendChild(E('circle',{cx:n.x,cy:n.y,r:10,fill:'none',stroke:'#fca5a5','stroke-width':2}));
+    g.appendChild(T('text','Fin',{x:n.x,y:n.y+26,fill:'#ef4444','font-size':'9','text-anchor':'middle','font-weight':'600'}));
+  }else if(n.t==='gw'){
+    const gg=E('g',{class:'gateway',transform:`translate(${n.x},${n.y})`});
+    gg.appendChild(E('rect',{x:-GS/2,y:-GS/2,width:GS,height:GS,transform:'rotate(45)',fill:lc.f,stroke:lc.s,class:'gateway-diamond'}));
+    if(n.lb){
+      n.lb.split('\n').forEach((l,i)=>{
+        gg.appendChild(T('text',l,{x:0,y:-4+i*11,fill:lc.s,'font-size':'9','font-weight':'600','text-anchor':'middle','dominant-baseline':'central'}));
+      });
+    }
+    g.appendChild(gg);
+  }else{
+    const rx=n.x-NW/2, ry=n.y-NH/2;
+    g.appendChild(E('rect',{x:rx,y:ry,width:NW,height:NH,class:'node-rect',fill:lc.f,stroke:lc.s}));
+    if(n.lb){
+      const lines=n.lb.split('\n');
+      lines.forEach((l,i)=>{
+        g.appendChild(T('text',l,{x:n.x,y:n.y+(i-(lines.length-1)/2)*13,class:'node-text',fill:'#f1f5f9','font-size':'11','text-anchor':'middle','dominant-baseline':'central'}));
+      });
+    }
+  }
+  svg.appendChild(g);
+  nodeEls[id]=g;
+}
+
+// Anchor function
+function anc(id,side){
+  const n=N[id];
+  let r;
+  if(n.t==='start'||n.t==='end') r=14;
+  else if(n.t==='gw') r=GS/2*Math.SQRT2*.72;
+  else r=0;
+  if(n.t==='start'||n.t==='end'){
+    if(side==='r')return[n.x+r,n.y];
+    if(side==='l')return[n.x-r,n.y];
+    if(side==='t')return[n.x,n.y-r];
+    if(side==='b')return[n.x,n.y+r];
+  }else if(n.t==='gw'){
+    if(side==='r')return[n.x+GS/2,n.y];
+    if(side==='l')return[n.x-GS/2,n.y];
+    if(side==='t')return[n.x,n.y-GS/2];
+    if(side==='b')return[n.x,n.y+GS/2];
+  }else{
+    if(side==='r')return[n.x+NW/2,n.y];
+    if(side==='l')return[n.x-NW/2,n.y];
+    if(side==='t')return[n.x,n.y-NH/2];
+    if(side==='b')return[n.x,n.y+NH/2];
+  }
+  return[n.x,n.y];
+}
+
+// Flow drawing
+function flow(from,fs,to,ts,opts){
+  const [x1,y1]=anc(from,fs), [x2,y2]=anc(to,ts);
+  const cls=opts?.cls||'flow-line';
+  const marker=opts?.marker||'#ah';
+  let d;
+  if(fs==='r'&&ts==='l'){
+    if(Math.abs(y1-y2)<3){d=`M ${x1} ${y1} L ${x2} ${y2}`}
+    else{const mx=(x1+x2)/2;d=`M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`}
+  }else if(fs==='b'&&ts==='t'){
+    if(Math.abs(x1-x2)<3){d=`M ${x1} ${y1} L ${x2} ${y2}`}
+    else{const my=(y1+y2)/2;d=`M ${x1} ${y1} L ${x1} ${my} L ${x2} ${my} L ${x2} ${y2}`}
+  }else if(fs==='t'&&ts==='b'){
+    if(Math.abs(x1-x2)<3){d=`M ${x1} ${y1} L ${x2} ${y2}`}
+    else{const my=(y1+y2)/2;d=`M ${x1} ${y1} L ${x1} ${my} L ${x2} ${my} L ${x2} ${y2}`}
+  }else if(fs==='r'&&ts==='t'){
+    d=`M ${x1} ${y1} L ${x2} ${y1} L ${x2} ${y2}`
+  }else if(fs==='r'&&ts==='b'){
+    d=`M ${x1} ${y1} L ${x2} ${y1} L ${x2} ${y2}`
+  }else if(fs==='b'&&ts==='r'){
+    d=`M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`
+  }else if(fs==='b'&&ts==='l'){
+    d=`M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`
+  }else if(fs==='l'&&ts==='r'){
+    const mx=(x1+x2)/2;d=`M ${x1} ${y1} L ${mx} ${y1} L ${mx} ${y2} L ${x2} ${y2}`
+  }else{
+    d=`M ${x1} ${y1} L ${x2} ${y2}`
+  }
+  flowG.appendChild(E('path',{d,class:cls,'marker-end':`url(${marker})`}));
+  if(opts?.label){
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    const lbl=T('text',opts.label,{x:mx,y:my-6,fill:opts.labelColor||'#94a3b8','font-size':'9','text-anchor':'middle','font-weight':'600'});
+    lbl.style.background='#0a0e1a';
+    flowG.appendChild(lbl);
+  }
+}
+
+// Main flow
+flow('start','r','importar','l');
+flow('importar','b','monitorear','t');
+flow('monitorear','r','cambio','l');
+flow('cambio','b','registrar_cambio','t',{label:'Si',labelColor:'#10b981',cls:'flow-line flow-yes',marker:'#aG'});
+flow('registrar_cambio','b','cerrar_anterior','t',{cls:'flow-line flow-data',marker:'#aI'});
+flow('cerrar_anterior','r','guardar_historial','l');
+flow('guardar_historial','r','cargar_ventas','l');
+flow('cargar_ventas','r','resolve','l');
+flow('resolve','r','gw_resuelto','l');
+flow('gw_resuelto','r','asignar_venta','l',{label:'Si',labelColor:'#10b981',cls:'flow-line flow-yes',marker:'#aG'});
+flow('gw_resuelto','t','alerta','b',{label:'No',labelColor:'#ef4444',cls:'flow-line flow-no',marker:'#aR'});
+flow('asignar_venta','b','liquidar','t');
+flow('liquidar','l','pago','r');
+flow('pago','l','end','r');
+
+// Professional view
+flow('asignar_venta','b','consultar_panel','t',{cls:'flow-line flow-data',marker:'#aI'});
+flow('consultar_panel','l','ver_historial','r');
+
+// Tooltip
+const tt=document.getElementById('tt');
+Object.entries(nodeEls).forEach(([id,el])=>{
+  el.addEventListener('mouseenter',(e)=>{
+    const tip=tips[id];
+    if(!tip)return;
+    const lbl=N[id].lb?N[id].lb.replace(/\n/g,' '):(N[id].t==='start'?'Inicio':N[id].t==='end'?'Fin':id);
+    tt.innerHTML=`<div class="tt-title">${lbl}</div>${tip}`;
+    tt.classList.add('visible');
+  });
+  el.addEventListener('mousemove',(e)=>{
+    tt.style.left=(e.clientX+14)+'px';
+    tt.style.top=(e.clientY+14)+'px';
+  });
+  el.addEventListener('mouseleave',()=>tt.classList.remove('visible'));
+});
+
+document.getElementById('dw').appendChild(svg);
+})();
+</script>
+</body>
+</html>

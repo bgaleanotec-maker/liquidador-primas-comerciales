@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Settings2, Upload, Calculator, CheckCircle, BarChart3,
   Shield, LogOut, Menu, X, Bell, ShoppingCart, CreditCard, Sliders,
-  Briefcase, Sun, Moon, Users, UserCheck, Activity, ChevronDown
+  Briefcase, Sun, Moon, Users, UserCheck, Activity, ChevronDown, BookOpen
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
@@ -59,6 +59,12 @@ const Layout = ({ children, pendingCount = 0 }) => {
         { path: '/variables', label: 'Variables', icon: Settings2, roles: ['admin', 'super_admin'] },
         { path: '/config', label: 'Config LLAVEs', icon: Sliders, roles: ['admin', 'super_admin'] },
         { path: '/admin', label: 'Administración', icon: Shield, roles: ['admin', 'super_admin'] },
+      ],
+    },
+    {
+      title: 'Ayuda',
+      items: [
+        { path: '/docs', label: 'Documentación', icon: BookOpen, roles: ['admin', 'super_admin', 'approver', 'analyst', 'professional', 'supervisor', 'viewer'] },
       ],
     },
   ]

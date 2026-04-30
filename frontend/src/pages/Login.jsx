@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Users, Activity, Database, Zap } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Users, Activity, Database, Zap, Workflow, FileText, BookOpen } from 'lucide-react'
 
 const isDev = import.meta.env.DEV
 
@@ -87,9 +87,28 @@ const Login = () => {
             </div>
           </div>
 
-          <p className="text-xs text-primary-200">
-            v1.0.0 Beta &middot; © 2026 Primax &middot; Galeano Herrera
-          </p>
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <p className="text-xs text-primary-200">
+              v1.0.0 Beta &middot; © 2026 Primax &middot; Galeano Herrera
+            </p>
+            <div className="flex gap-2">
+              <a
+                href="/bpmn-aliados.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-lg text-xs font-medium transition-colors"
+              >
+                <Workflow size={13} /> Flujo BPMN
+              </a>
+              <a
+                href="/static/propuesta.docx"
+                download
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 rounded-lg text-xs font-medium transition-colors"
+              >
+                <FileText size={13} /> Propuesta
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
